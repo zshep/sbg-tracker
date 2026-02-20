@@ -1,10 +1,19 @@
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
+
+import ClassSection from "../components/ClassSection";
+import ClassCard from "../components/ClassCard";
 
 export default function Dashboard() {
 
     const { user } = useAuth();
-
     if(!user) return null;
+
+    
+    
+
+
+
+
 
     return (
         <div>
@@ -13,7 +22,7 @@ export default function Dashboard() {
             <p>Hello user, {user.uid}</p>
 
             <div>
-                <p>class Section</p>
+                <ClassSection/>
             </div>
 
             <div>

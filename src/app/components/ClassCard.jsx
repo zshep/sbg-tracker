@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function ClassCard({ uid, klass, onDelete }) {
+export default function ClassCard({ uid, klass, onDelete }) {
   return (
     <div className="class-card">
       <div className="class-card-top">
