@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 
 export default function Home() {
+
+    const { user, loading } = useAuth();
+
+    if (loading) return null;
+    if (!user) return null;
 
 
     return (
@@ -13,7 +19,7 @@ export default function Home() {
             <p>Sign ins will be available soon. For now CLick on the link below to go to the dashboard</p>
 
             <nav className="home-nav">
-                <Link className="primary-link" to="/teacher/{uid}" >Dashboard</Link>
+                <Link className="primary-link" to={`/teacher/${user.uid}`} >Dashboard</Link>
             </nav>
 
 
