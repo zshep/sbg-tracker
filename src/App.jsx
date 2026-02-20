@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import RequireAuth from "./app/context/RequireAuth";
 import './App.css'
 
 import Home from "./app/pages/Home";
@@ -17,14 +18,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
 
-        <Route path="/teacher/:uid" element={<Dashboard/>} />
-        <Route path="/teacher/:uid/standards" element={<Standards />} />
-        <Route path="/teacher/:uid/classes" element={<Classes />}/>
-        <Route path="/teacher/:uid/classes/:classId/students" element={<Students />} />
-
+        <Route element={<RequireAuth/>}>
+          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/standards" element={<Standards />} />
+          <Route path="/classes" element={<Classes />}/>
+          <Route path="/classes/:classId/students" element={<Students />} />
+        </Route>
 
       </Routes>
-    
     </BrowserRouter>
   )
 }

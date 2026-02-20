@@ -19,7 +19,7 @@ export default function Home() {
             <p>Sign ins will be available soon. For now CLick on the link below to go to the dashboard</p>
 
             <nav className="home-nav">
-                <Link className="primary-link" to={`/teacher/${user.uid}`} >Dashboard</Link>
+                <Link className="primary-link" to="/dashboard" >Dashboard</Link>
             </nav>
 
 
