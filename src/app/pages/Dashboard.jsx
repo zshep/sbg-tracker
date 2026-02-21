@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 
-import ClassSection from "../components/ClassSection";
-import ClassCard from "../components/ClassCard";
+import ClassSection from "../components/Dashboard/ClassSection";
+import ClassCard from "../components/Dashboard/ClassCard";
 
 export default function Dashboard() {
 

@@ -10,8 +10,8 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../services/firebase/firebase"; 
-import { useAuth } from "../context/AuthContext";
+import { db } from "../../services/firebase/firebase"; 
+import { useAuth } from "../../context/AuthContext";
 
 import ClassCard from "./ClassCard";
 
