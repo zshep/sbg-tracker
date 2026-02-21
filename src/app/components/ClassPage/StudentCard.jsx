@@ -10,7 +10,7 @@ export default function StudentCard({ classId, student, onDelete }) {
 
         <div className="student-card-actions">
           <Link className="btn small" to={`/classes/${classId}/students`}>
-            View students
+            View student
           </Link>
 
           <button
