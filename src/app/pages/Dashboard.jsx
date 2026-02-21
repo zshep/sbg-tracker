@@ -8,17 +8,11 @@ export default function Dashboard() {
     const { user } = useAuth();
     if(!user) return null;
 
-    
-    
-
-
-
-
 
     return (
         <div>
             
-            <h3>Dashboard</h3>
+            <h2>Dashboard</h2>
             <p>Hello user, {user.uid}</p>
 
             <div>

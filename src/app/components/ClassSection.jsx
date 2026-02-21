@@ -41,7 +41,7 @@ import ClassCard from "./ClassCard";
           className: className.trim(),
           classPeriod: classPeriod.trim(),
         });
-        onClose();
+        
 
       };
     
@@ -84,7 +84,7 @@ import ClassCard from "./ClassCard";
     }
 
 
-export default function Classes() {
+export default function ClassSection() {
   const { user, loading } = useAuth();
 
   const [classes, setClasses] = useState([]);

@@ -110,3 +110,44 @@ button.danger {
   gap: 10px;
   margin-top: 6px;
 }
+
+
+/* Student styling for classpage */
+.student-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.student-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.student-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-card-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn.small {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+}
+
+.btn.small.danger,
+button.btn.small.danger {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+}

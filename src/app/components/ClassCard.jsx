@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function ClassCard({ uid, klass, onDelete }) {
+export default function ClassCard({ klass, onDelete }) {
   return (
     <div className="class-card">
       <div className="class-card-top">
@@ -10,7 +10,7 @@ export default function ClassCard({ uid, klass, onDelete }) {
         </div>
 
         <div className="class-card-actions">
-          <Link to={`/teacher/${uid}/classes/${klass.id}/students`}>
+          <Link to={`/class/${klass.id}`}>
             View class
           </Link>
 

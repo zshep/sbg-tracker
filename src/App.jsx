@@ -4,11 +4,11 @@ import './App.css'
 
 import Home from "./app/pages/Home";
 import Dashboard from "./app/pages/Dashboard";
-import Classes from "./app/pages/Classes";
+import ClassPage from "./app/pages/ClassPage";
 import Evidence from "./app/pages/Evidence";
 import MasteryGrid from "./app/pages/MasteryGrid";
 import Standards from "./app/pages/Standards";
-import Students from "./app/pages/Students";
+import Student from "./app/pages/Student";
 
 
 function App() {
@@ -21,8 +21,8 @@ function App() {
         <Route element={<RequireAuth/>}>
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/standards" element={<Standards />} />
-          <Route path="/classes" element={<Classes />}/>
-          <Route path="/classes/:classId/students" element={<Students />} />
+          <Route path="/class/:classId" element={<ClassPage />}/>
+          <Route path="/classes/:classId/students" element={<Student />} />
         </Route>
 
       </Routes>
