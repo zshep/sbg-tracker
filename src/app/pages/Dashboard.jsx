@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 
 import ClassSection from "../components/Dashboard/ClassSection";
-import ClassCard from "../components/Dashboard/ClassCard";
+
 
 export default function Dashboard() {
 
@@ -19,9 +19,7 @@ export default function Dashboard() {
                 <ClassSection/>
             </div>
 
-            <div>
-                <p>standars section </p>
-            </div>
+        
 
         </div>
     )
