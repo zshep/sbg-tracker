@@ -8,7 +8,7 @@ export default function NavBar() {
   const links = useMemo(
     () => [
       { to: "/dashboard", label: "Classes", icon: "🏫" },
-      { to: "/standards", label: "Standards", icon: "🎯" },
+      { to: "/standardslist", label: "Standards", icon: "🎯" },
       { to: "/evidence", label: "Evidence", icon: "🧾" },
       { to: "/studentlist", label: "Students", icon: "👥" },
     ],

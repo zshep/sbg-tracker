@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 export default function StandardModal({
   isOpen,
-  mode = "add", 
+  mode = "add",
   initialValue = null, // { id, code, text }
   onClose,
   onSubmit,
@@ -43,11 +43,11 @@ export default function StandardModal({
 
     try {
       setSaving(true);
-      await onSubmit({
-        id: initialValue?.id ?? null,
-        code: trimmedCode,
-        text: trimmedText,
-      });
+      await onSubmit(
+        mode === "edit"
+          ? { id: initialValue?.id ?? null, text: trimmedText }
+          : { id: null, code: trimmedCode, text: trimmedText },
+      );
       onClose();
     } catch (err) {
       console.error(err);
@@ -68,7 +68,11 @@ export default function StandardModal({
       >
         <div className="modal__header">
           <h3>{mode === "edit" ? "Edit Standard" : "Add Standard"}</h3>
-          <button className="btn btn-ghost" onClick={onClose} aria-label="Close">
+          <button
+            className="btn btn-ghost"
+            onClick={onClose}
+            aria-label="Close"
+          >
             ✕
           </button>
         </div>
@@ -80,7 +84,8 @@ export default function StandardModal({
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="e.g., F.1a"
-              autoFocus
+              disabled={mode == "edit"}
+              aria-disbaled={mode === "edit"}
             />
           </label>
 
@@ -97,11 +102,20 @@ export default function StandardModal({
           {error ? <div className="error">{error}</div> : null}
 
           <div className="modal__footer">
-            <button type="button" className="btn" onClick={onClose} disabled={saving}>
+            <button
+              type="button"
+              className="btn"
+              onClick={onClose}
+              disabled={saving}
+            >
               Cancel
             </button>
             <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? "Saving..." : mode === "edit" ? "Save Changes" : "Save Standard"}
+              {saving
+                ? "Saving..."
+                : mode === "edit"
+                  ? "Save Changes"
+                  : "Save Standard"}
             </button>
           </div>
         </form>

@@ -9,13 +9,13 @@ import {
   serverTimestamp,
   collection,
   getDoc,
-  updateDoc,
 } from "firebase/firestore";
 
 import { auth, db } from "../services/firebase/firebase";
 
 import StandardModal from "../components/StandardsPage/StandardModal";
 import StandardsCard from "../components/StandardsPage/StandardsCard";
+
 // Drag and Drop imports/dependencies
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
@@ -25,11 +25,8 @@ import {
 } from "@dnd-kit/sortable";
 import { writeBatch } from "firebase/firestore";
 
-export default function StandardsPage() {
+export default function StandardsListPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("add"); // "add" | "edit"
-  const [editingStandard, setEditingStandard] = useState(null); // {id, code, text, ...}
-
   const [standards, setStandards] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +44,7 @@ export default function StandardsPage() {
     if (!teacherId) return null;
     return query(
       collection(db, "teachers", teacherId, "standards"),
-      orderBy("sortIndex", "asc"), // use sortIndex now (drag/drop ready)
+      orderBy("sortIndex", "asc")
     );
   }, [teacherId]);
 
@@ -70,98 +67,38 @@ export default function StandardsPage() {
         console.error(err);
         setStandards([]);
         setLoading(false);
-      },
+      }
     );
 
     return () => unsub();
   }, [standardsQuery]);
 
-  const openAdd = () => {
-    setModalMode("add");
-    setEditingStandard(null);
-    setIsModalOpen(true);
-  };
+  const openAdd = () => setIsModalOpen(true);
 
-  const openEdit = (standard) => {
-    setModalMode("edit");
-    setEditingStandard(standard);
-    setIsModalOpen(true);
-  };
-
-  // Adds or edits depending on modalMode
-  const handleSubmitStandard = async ({ id, code, text }) => {
+  const handleAddStandard = async ({ code, text }) => {
     if (!teacherId) throw new Error("Not signed in.");
 
     const cleanCode = code.trim();
     const cleanText = text.trim();
-    const newId = normalizeCode(cleanCode);
+    const standardId = normalizeCode(cleanCode);
 
-    const standardsColPath = ["teachers", teacherId, "standards"];
+    const ref = doc(db, "teachers", teacherId, "standards", standardId);
+    const existing = await getDoc(ref);
 
-    // ADD MODE
-    if (modalMode === "add") {
-      const targetRef = doc(db, ...standardsColPath, newId);
-      const existing = await getDoc(targetRef);
-
-      if (existing.exists()) {
-        throw new Error(
-          `Code "${cleanCode}" already exists. Choose a different code.`,
-        );
-      }
-
-      await setDoc(
-        targetRef,
-        {
-          code: cleanCode,
-          text: cleanText,
-          createdAt: serverTimestamp(),
-          sortIndex: Date.now(),
-        },
-        { merge: false },
-      );
-
-      return;
+    if (existing.exists()) {
+      throw new Error(`Code "${cleanCode}" already exists. Choose a different code.`);
     }
-
-    // EDIT MODE
-    if (!id) throw new Error("Missing standard id.");
-
-    const oldRef = doc(db, ...standardsColPath, id);
-
-    // If code didn't change, just update the text (and keep code as-is)
-    if (id === newId) {
-      await updateDoc(oldRef, {
-        code: cleanCode, // keep consistent with display (you can omit if you want)
-        text: cleanText,
-      });
-      return;
-    }
-
-    // Code changed => rename the doc (create new doc, then delete old)
-    const newRef = doc(db, ...standardsColPath, newId);
-    const existingNew = await getDoc(newRef);
-
-    if (existingNew.exists()) {
-      throw new Error(
-        `Code "${cleanCode}" already exists. Choose a different code.`,
-      );
-    }
-
-    // Preserve sortIndex + createdAt if you want
-    const oldStandard = standards.find((s) => s.id === id);
 
     await setDoc(
-      newRef,
+      ref,
       {
         code: cleanCode,
         text: cleanText,
-        createdAt: oldStandard?.createdAt ?? serverTimestamp(),
-        sortIndex: oldStandard?.sortIndex ?? Date.now(),
+        createdAt: serverTimestamp(),
+        sortIndex: Date.now(),
       },
-      { merge: false },
+      { merge: false }
     );
-
-    await deleteDoc(oldRef);
   };
 
   const handleDeleteStandard = async (standardId) => {
@@ -171,7 +108,7 @@ export default function StandardsPage() {
     const label = standard ? `${standard.code} — ${standard.text}` : standardId;
 
     const confirmed = window.confirm(
-      `Delete this standard?\n\n${label}\n\nThis cannot be undone.`,
+      `Delete this standard?\n\n${label}\n\nThis cannot be undone.`
     );
     if (!confirmed) return;
 
@@ -184,7 +121,6 @@ export default function StandardsPage() {
   const handleDragEnd = async (event) => {
     const { active, over } = event;
     if (!over) return;
-
     if (active.id === over.id) return;
 
     const oldIndex = standards.findIndex((s) => s.id === active.id);
@@ -195,8 +131,6 @@ export default function StandardsPage() {
     // Optimistic UI update
     setStandards(reordered);
 
-    // Rewrite sortIndex simply: 1000, 2000, 3000...
-    // (spacing makes later inserts easier if you ever need it)
     try {
       if (!teacherId) return;
 
@@ -209,7 +143,6 @@ export default function StandardsPage() {
       await batch.commit();
     } catch (err) {
       console.error("Reorder failed:", err);
-      // Optional: hard reset by letting snapshot re-sync
       alert("Could not save new order. Try again.");
     }
   };
@@ -235,20 +168,13 @@ export default function StandardsPage() {
           <p>No standards yet. Add your first one.</p>
         ) : null}
 
-        <DndContext
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={standardIds}
-            strategy={verticalListSortingStrategy}
-          >
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={standardIds} strategy={verticalListSortingStrategy}>
             <div className="standards-list">
               {standards.map((s) => (
                 <StandardsCard
                   key={s.id}
                   standard={s}
-                  onEdit={openEdit}
                   onDelete={handleDeleteStandard}
                 />
               ))}
@@ -259,10 +185,10 @@ export default function StandardsPage() {
 
       <StandardModal
         isOpen={isModalOpen}
-        mode={modalMode}
-        initialValue={editingStandard}
+        mode="add"
+        initialValue={null}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmitStandard}
+        onSubmit={handleAddStandard}
       />
     </div>
   );

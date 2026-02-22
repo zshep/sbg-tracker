@@ -7,7 +7,8 @@ import Dashboard from "./app/pages/Dashboard";
 import ClassPage from "./app/pages/ClassPage";
 import Evidence from "./app/pages/Evidence";
 import MasteryGrid from "./app/pages/MasteryGrid";
-import Standards from "./app/pages/Standards";
+import StandardsListPage from "./app/pages/StandardsListPage";
+import StandardPage from "./app/pages/StandardPage";
 import StudentPage from "./app/pages/StudentPage";
 import StudentList from "./app/pages/StudentList";
 
@@ -22,7 +23,8 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/standards" element={<Standards />} />
+            <Route path="/standardslist" element={<StandardsListPage />} />
+            <Route path="/standard/:standardId" element={<StandardPage />} />
             <Route path="/evidence" element={<Evidence />} />
             <Route path="/studentlist" element={<StudentList />} />
 
