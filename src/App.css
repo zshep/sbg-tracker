@@ -182,12 +182,13 @@ button.btn.small.danger {
   display: flex;
   justify-content: space-between;
   gap: 12px;
+  background: #fff;
 }
 
 .standard-card__main {
   display: flex;
   gap: 12px;
-  align-items: flex-start;
+  align-items: center;
   flex: 1;
 }
 
@@ -201,6 +202,7 @@ button.btn.small.danger {
 }
 
 .standard-card__text {
+  align-self: flex-start;
   line-height: 1.35;
 }
 
@@ -290,4 +292,24 @@ textarea {
 .error {
   color: #c0392b;
   font-size: 14px;
+}
+
+/*  Standard drag and drop styling */
+.standard-card.is-dragging {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border-color: #ccc;
+}
+
+.drag-handle {
+  cursor: grab;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 10px;
+  padding: 6px 10px;
+  line-height: 1;
+  user-select: none;
+  touch-action: none;
+}
+.drag-handle:active {
+  cursor: grabbing;
 }

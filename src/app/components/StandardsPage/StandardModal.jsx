@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
 
-export default function AddStandardModal({ isOpen, onClose, onSubmit }) {
+export default function StandardModal({
+  isOpen,
+  mode = "add", 
+  initialValue = null, // { id, code, text }
+  onClose,
+  onSubmit,
+}) {
   const [code, setCode] = useState("");
   const [text, setText] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen) return;
+
+    setError("");
+    setSaving(false);
+
+    if (mode === "edit" && initialValue) {
+      setCode(initialValue.code ?? "");
+      setText(initialValue.text ?? "");
+    } else {
       setCode("");
       setText("");
-      setSaving(false);
-      setError("");
     }
-  }, [isOpen]);
+  }, [isOpen, mode, initialValue]);
 
   if (!isOpen) return null;
 
@@ -31,11 +43,15 @@ export default function AddStandardModal({ isOpen, onClose, onSubmit }) {
 
     try {
       setSaving(true);
-      await onSubmit({ code: trimmedCode, text: trimmedText });
+      await onSubmit({
+        id: initialValue?.id ?? null,
+        code: trimmedCode,
+        text: trimmedText,
+      });
       onClose();
     } catch (err) {
       console.error(err);
-      setError("Could not save standard. Try again.");
+      setError(err?.message || "Could not save standard. Try again.");
     } finally {
       setSaving(false);
     }
@@ -48,10 +64,10 @@ export default function AddStandardModal({ isOpen, onClose, onSubmit }) {
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label="Add Standard"
+        aria-label={mode === "edit" ? "Edit Standard" : "Add Standard"}
       >
         <div className="modal__header">
-          <h3>Add Standard</h3>
+          <h3>{mode === "edit" ? "Edit Standard" : "Add Standard"}</h3>
           <button className="btn btn-ghost" onClick={onClose} aria-label="Close">
             ✕
           </button>
@@ -85,7 +101,7 @@ export default function AddStandardModal({ isOpen, onClose, onSubmit }) {
               Cancel
             </button>
             <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? "Saving..." : "Save Standard"}
+              {saving ? "Saving..." : mode === "edit" ? "Save Changes" : "Save Standard"}
             </button>
           </div>
         </form>
