@@ -344,3 +344,100 @@ input:disabled {
   gap: 8px;
   align-items: center;
 }
+
+select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font: inherit;
+  background: white;
+}
+
+
+.evidence-toolbar {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.chip {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.chip--active {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.evidence-toolbar .filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+/* Pill styling */
+.pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  border: 1px solid #ddd;
+  background: #f6f6f6;
+}
+
+/* Type-specific colors */
+.pill--quiz {
+  background: #eef4ff;
+  border-color: #cddcff;
+}
+
+.pill--test {
+  background: #fff0f0;
+  border-color: #ffd1d1;
+}
+
+.pill--lab {
+  background: #f0fff5;
+  border-color: #c7f0d6;
+}
+
+.pill--exit_ticket {
+  background: #fffbe6;
+  border-color: #ffefb3;
+}
+
+.pill--project {
+  background: #f4f0ff;
+  border-color: #d9ccff;
+}
+
+.pill--discussion {
+  background: #f0f7ff;
+  border-color: #cfe5ff;
+}
+
+.pill--homework {
+  background: #f9f9f9;
+  border-color: #e5e5e5;
+}
+
+.pill--other {
+  background: #f6f6f6;
+  border-color: #ddd;
+}

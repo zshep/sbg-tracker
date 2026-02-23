@@ -15,114 +15,8 @@ import {
 
 import { auth, db } from "../services/firebase/firebase";
 import StandardModal from "../components/StandardsPage/StandardModal";
-
-// --- Minimal Evidence UI (MVP) ---
-function EvidenceCard({ evidence, onEdit, onDelete }) {
-  return (
-    <div className="evidence-card">
-      <div className="evidence-card__title">{evidence.title}</div>
-      <div className="evidence-card__actions">
-        <button type="button" className="btn" onClick={() => onEdit(evidence)}>
-          Edit
-        </button>
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={() => onDelete(evidence.id)}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function EvidenceModal({ isOpen, initialTitle = "", onClose, onSubmit }) {
-  const [title, setTitle] = useState(initialTitle);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!isOpen) return;
-    setTitle(initialTitle);
-    setSaving(false);
-    setError("");
-  }, [isOpen, initialTitle]);
-
-  if (!isOpen) return null;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    const t = title.trim();
-    if (!t) {
-      setError("Please enter evidence text/title.");
-      return;
-    }
-
-    try {
-      setSaving(true);
-      await onSubmit(t);
-      onClose();
-    } catch (err) {
-      console.error(err);
-      setError("Could not save evidence. Try again.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div className="modal-backdrop" onClick={onClose} role="presentation">
-      <div
-        className="modal"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="modal__header">
-          <h3>{initialTitle ? "Edit Evidence" : "Add Evidence"}</h3>
-          <button
-            className="btn btn-ghost"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="modal__body">
-          <label className="field">
-            <span className="field__label">Evidence</span>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g., Quiz 1, Lab: Circuits, Exit Ticket 3..."
-              autoFocus
-            />
-          </label>
-
-          {error ? <div className="error">{error}</div> : null}
-
-          <div className="modal__footer">
-            <button
-              type="button"
-              className="btn"
-              onClick={onClose}
-              disabled={saving}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? "Saving..." : "Save"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+import EvidenceModal from "../components/StandardsPage/EvidenceModal";
+import EvidenceCard from "../components/StandardsPage/EvidenceCard";
 
 export default function StandardPage() {
   const { standardId } = useParams();
@@ -136,9 +30,38 @@ export default function StandardPage() {
   // Evidence state
   const [evidence, setEvidence] = useState([]);
   const [loadingEvidence, setLoadingEvidence] = useState(true);
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   const [isEvidenceModalOpen, setIsEvidenceModalOpen] = useState(false);
-  const [editingEvidence, setEditingEvidence] = useState(null); // {id,title}
+  const [editingEvidence, setEditingEvidence] = useState(null); // {id,title, type}
+
+  const EVIDENCE_TYPES = [
+    { value: "quiz", label: "Quiz" },
+    { value: "test", label: "Test" },
+    { value: "lab", label: "Lab" },
+    { value: "homework", label: "Homework" },
+    { value: "exit_ticket", label: "Exit Ticket" },
+    { value: "project", label: "Project" },
+    { value: "discussion", label: "Discussion" },
+    { value: "other", label: "Other" },
+  ];
+
+  //filter helper
+  const filteredEvidence = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase();
+
+    return evidence.filter((ev) => {
+      const evType = ev.type || "other";
+      const typeOk = typeFilter === "all" ? true : evType === typeFilter;
+
+      const textOk =
+        !normalizedSearch ||
+        (ev.title || "").toLowerCase().includes(normalizedSearch);
+
+      return typeOk && textOk;
+    });
+  }, [evidence, typeFilter, search]);
 
   // Load standard doc
   useEffect(() => {
@@ -233,7 +156,7 @@ export default function StandardPage() {
     setIsEvidenceModalOpen(true);
   };
 
-  const handleSubmitEvidence = async (title) => {
+  const handleSubmitEvidence = async ({ title, type }) => {
     if (!teacherId) throw new Error("Not signed in.");
 
     const colRef = collection(
@@ -248,6 +171,7 @@ export default function StandardPage() {
     if (!editingEvidence) {
       await addDoc(colRef, {
         title: title.trim(),
+        type,
         createdAt: serverTimestamp(),
       });
       return;
@@ -262,7 +186,11 @@ export default function StandardPage() {
       "evidence",
       editingEvidence.id,
     );
-    await updateDoc(ref, { title: title.trim() });
+
+    await updateDoc(ref, {
+      title: title.trim(),
+      type,
+    });
   };
 
   const handleDeleteEvidence = async (evidenceId) => {
@@ -329,6 +257,48 @@ export default function StandardPage() {
         ) : null}
       </section>
 
+      <div className="evidence-toolbar">
+        <div className="filter-row">
+          <label className="field" style={{ margin: 0, minWidth: 220 }}>
+            <span className="field__label">Filter by type</span>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              {EVIDENCE_TYPES.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="field" style={{ margin: 0, flex: 1 }}>
+            <span className="field__label">Search</span>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search evidence..."
+            />
+          </label>
+
+          {(typeFilter !== "all" || search) && (
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                setTypeFilter("all");
+                setSearch("");
+              }}
+              style={{ alignSelf: "end" }}
+            >
+              Clear
+            </button>
+          )}
+        </div>
+      </div>
+
       <section className="section">
         <div
           className="section__head"
@@ -354,8 +324,18 @@ export default function StandardPage() {
           <p>No evidence yet for this standard.</p>
         ) : null}
 
+        {!loadingEvidence && evidence.length === 0 ? (
+          <p>No evidence yet for this standard.</p>
+        ) : null}
+
+        {!loadingEvidence &&
+        evidence.length > 0 &&
+        filteredEvidence.length === 0 ? (
+          <p>No evidence matches this filter.</p>
+        ) : null}
+
         <div className="evidence-list">
-          {evidence.map((ev) => (
+          {filteredEvidence.map((ev) => (
             <EvidenceCard
               key={ev.id}
               evidence={ev}
@@ -380,7 +360,11 @@ export default function StandardPage() {
 
       <EvidenceModal
         isOpen={isEvidenceModalOpen}
-        initialTitle={editingEvidence?.title ?? ""}
+        initialValue={
+          editingEvidence
+            ? { title: editingEvidence.title, type: editingEvidence.type }
+            : null
+        }
         onClose={() => setIsEvidenceModalOpen(false)}
         onSubmit={handleSubmitEvidence}
       />
