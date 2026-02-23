@@ -441,3 +441,28 @@ select {
   background: #f6f6f6;
   border-color: #ddd;
 } 
+
+/* class Standard card styling */
+.standard-row {
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.standard-row__code {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.standard-row__text {
+  line-height: 1.35;
+}
+
+.standard-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import {
   doc,
@@ -9,10 +9,13 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../services/firebase/firebase";
 import { useAuth } from "../context/AuthContext";
 import StudentCard from "../components/ClassPage/StudentCard";
+import AddStandardToClassModal from "../components/ClassPage/AddStandardToClassModal";
+import ClassStandardRow from "../components/ClassPage/ClassStandardCard";
 
 function AddStudentModal({ open, onClose, onCreate }) {
   const [name, setName] = useState("");
@@ -73,6 +76,33 @@ export default function ClassPage() {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  // --- Standards linking (join collection) ---
+  const [allStandards, setAllStandards] = useState([]);
+  const [allStandardsLoading, setAllStandardsLoading] = useState(true);
+
+  const [classStandardLinks, setClassStandardLinks] = useState([]); // join docs
+  const [classStandardsLoading, setClassStandardsLoading] = useState(true);
+
+  const [standardModalOpen, setStandardModalOpen] = useState(false);
+
+  const linkedStandardIds = useMemo(
+    () => new Set(classStandardLinks.map((l) => l.id)),
+    [classStandardLinks],
+  );
+
+  const linkedStandards = useMemo(() => {
+    // Preserve join order (by sortIndex), map join -> actual standard doc
+    const standardMap = new Map(allStandards.map((s) => [s.id, s]));
+
+    return classStandardLinks
+      .map((link) => standardMap.get(link.id))
+      .filter(Boolean);
+  }, [allStandards, classStandardLinks]);
+
+  const availableStandardsToLink = useMemo(() => {
+    return allStandards.filter((s) => !linkedStandardIds.has(s.id));
+  }, [allStandards, linkedStandardIds]);
+
   // --- Read class doc ---
   useEffect(() => {
     if (!user || !classId) return;
@@ -128,6 +158,59 @@ export default function ClassPage() {
     return () => unsub();
   }, [user, classId]);
 
+  // --- Read teacher standards library ---
+  useEffect(() => {
+    if (!user) return;
+
+    const standardsRef = collection(db, "teachers", user.uid, "standards");
+    const q = query(standardsRef, orderBy("sortIndex", "asc"));
+
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        setAllStandardsLoading(false);
+        setAllStandards(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      },
+      (err) => {
+        console.error("Standards listen failed:", err);
+        setAllStandardsLoading(false);
+      },
+    );
+
+    return () => unsub();
+  }, [user]);
+
+  // --- Read classStandards join subcollection ---
+  useEffect(() => {
+    if (!user || !classId) return;
+
+    const ref = collection(
+      db,
+      "teachers",
+      user.uid,
+      "classes",
+      classId,
+      "classStandards",
+    );
+    const q = query(ref, orderBy("sortIndex", "asc"));
+
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        setClassStandardsLoading(false);
+        setClassStandardLinks(
+          snap.docs.map((d) => ({ id: d.id, ...d.data() })),
+        );
+      },
+      (err) => {
+        console.error("Class standards listen failed:", err);
+        setClassStandardsLoading(false);
+      },
+    );
+
+    return () => unsub();
+  }, [user, classId]);
+
   if (loading) return null;
   if (!user) return null;
 
@@ -161,6 +244,53 @@ export default function ClassPage() {
     );
   };
 
+  //link and unlink Standards function helpers
+  const handleLinkStandard = async (standardId) => {
+    if (!user) return;
+
+    // join doc id = standardId -> prevents duplicates
+    const joinRef = doc(
+      db,
+      "teachers",
+      user.uid,
+      "classes",
+      classId,
+      "classStandards",
+      standardId,
+    );
+
+    await setDoc(
+      joinRef,
+      {
+        standardId,
+        linkedAt: serverTimestamp(),
+        sortIndex: Date.now(),
+      },
+      { merge: false },
+    );
+
+    setStandardModalOpen(false);
+  };
+
+  const handleRemoveStandardFromClass = async (standard) => {
+    const ok = window.confirm(
+      `Remove standard "${standard.code}" from this class?`,
+    );
+    if (!ok) return;
+
+    await deleteDoc(
+      doc(
+        db,
+        "teachers",
+        user.uid,
+        "classes",
+        classId,
+        "classStandards",
+        standard.id,
+      ),
+    );
+  };
+
   return (
     <div>
       <header style={{ marginBottom: "12px" }}>
@@ -168,6 +298,7 @@ export default function ClassPage() {
         <p>Period: {klass.classPeriod}</p>
       </header>
 
+      {/*Students Section */}
       <section style={{ marginTop: "16px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Students</h4>
@@ -199,6 +330,38 @@ export default function ClassPage() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onCreate={handleAddStudent}
+      />
+
+      <section style={{ marginTop: "16px" }}>
+        {/* Standards section */}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h4>Standards</h4>
+          <button type="button" onClick={() => setStandardModalOpen(true)}>
+            Add Standard
+          </button>
+        </div>
+
+        {allStandardsLoading || classStandardsLoading ? (
+          <p>Loading standards…</p>
+        ) : linkedStandards.length === 0 ? (
+          <p>No standards linked to this class yet.</p>
+        ) : (
+          <div style={{ display: "grid", gap: "12px" }}>
+            {linkedStandards.map((st) => (
+              <ClassStandardRow
+                key={st.id}
+                standard={st}
+                onRemove={handleRemoveStandardFromClass}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+      <AddStandardToClassModal
+        open={standardModalOpen}
+        onClose={() => setStandardModalOpen(false)}
+        standards={availableStandardsToLink}
+        onLink={handleLinkStandard}
       />
     </div>
   );
