@@ -11,6 +11,7 @@ import StandardsListPage from "./app/pages/StandardsListPage";
 import StandardPage from "./app/pages/StandardPage";
 import StudentPage from "./app/pages/StudentPage";
 import StudentList from "./app/pages/StudentList";
+import ScoringPage from "./app/pages/ScoringPage";
 
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
 
@@ -29,6 +30,8 @@ function App() {
             <Route path="/studentlist" element={<StudentList />} />
 
             <Route path="/class/:classId" element={<ClassPage />} />
+            <Route path="/class/:classId/standard/:standardId" element={<ScoringPage/>} />
+
             <Route
               path="/classes/:classId/studentpage"
               element={<StudentPage />}

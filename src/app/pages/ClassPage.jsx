@@ -365,6 +365,7 @@ export default function ClassPage() {
       <header style={{ marginBottom: "12px" }}>
         <h3>{klass.className}</h3>
         <p>Period: {klass.classPeriod}</p>
+        {/*<p>ClassId: {classId}</p> */}
       </header>
 
       {/*Students Section */}
@@ -421,6 +422,7 @@ export default function ClassPage() {
                 key={st.id}
                 standard={st}
                 onRemove={handleRemoveStandardFromClass}
+                classId={classId}
               />
             ))}
           </div>

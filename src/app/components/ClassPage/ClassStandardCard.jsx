@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function ClassStandardRow({ standard, onRemove }) {
+export default function ClassStandardRow({ standard, onRemove, classId }) {
 
   const navigate = useNavigate();
 
@@ -12,6 +12,13 @@ export default function ClassStandardRow({ standard, onRemove }) {
       </div>
 
       <div className="standard-row__actions">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => navigate(`/class/${classId}/standard/${standard.id}`)}
+        >
+          Score
+        </button>
         <button
           type="button"
           className="btn"
