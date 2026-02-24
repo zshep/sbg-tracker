@@ -1,22 +1,26 @@
 import { useAuth } from "../context/AuthContext";
 
-import ClassSection from "../components/Dashboard/ClassSection";
-
 
 export default function Dashboard() {
-  const { user } = useAuth();
-  if (!user) return null;
 
-  return (
-    <div>
-     
+    const { user } = useAuth();
 
-      <main style={{ flex: 1, padding: 16 }}>
-        <h2>Dashboard</h2>
-        <p>Hello user, {user.uid}</p>
+    if(!user) return null;
 
-        <ClassSection />
-      </main>
-    </div>
-  );
+    return (
+        <div>
+            
+            <h3>Dashboard</h3>
+            <p>Hello user, {user.uid}</p>
+
+            <div>
+                <p>class Section</p>
+            </div>
+
+            <div>
+                <p>standars section </p>
+            </div>
+
+        </div>
+    )
 }

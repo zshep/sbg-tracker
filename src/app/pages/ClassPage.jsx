@@ -4,6 +4,7 @@ import {
   doc,
   onSnapshot,
   collection,
+  getDoc,
   addDoc,
   deleteDoc,
   query,
@@ -16,6 +17,7 @@ import { useAuth } from "../context/AuthContext";
 import StudentCard from "../components/ClassPage/StudentCard";
 import AddStandardToClassModal from "../components/ClassPage/AddStandardToClassModal";
 import ClassStandardRow from "../components/ClassPage/ClassStandardCard";
+import StandardModal from "../components/StandardsPage/StandardModal";
 
 function AddStudentModal({ open, onClose, onCreate }) {
   const [name, setName] = useState("");
@@ -79,16 +81,25 @@ export default function ClassPage() {
   // --- Standards linking (join collection) ---
   const [allStandards, setAllStandards] = useState([]);
   const [allStandardsLoading, setAllStandardsLoading] = useState(true);
+  const [addStandardOpen, setAddStandardOpen] = useState(false);
+  const [createStandardOpen, setCreateStandardOpen] = useState(false);
 
   const [classStandardLinks, setClassStandardLinks] = useState([]); // join docs
   const [classStandardsLoading, setClassStandardsLoading] = useState(true);
-
-  const [standardModalOpen, setStandardModalOpen] = useState(false);
 
   const linkedStandardIds = useMemo(
     () => new Set(classStandardLinks.map((l) => l.id)),
     [classStandardLinks],
   );
+
+  //normalizer helper
+  function normalizeCode(code) {
+    return code
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[^a-z0-9._-]/g, "_");
+  }
 
   const linkedStandards = useMemo(() => {
     // Preserve join order (by sortIndex), map join -> actual standard doc
@@ -269,7 +280,12 @@ export default function ClassPage() {
       { merge: false },
     );
 
-    setStandardModalOpen(false);
+    setAddStandardOpen(false);
+  };
+
+  const openCreateStandard = () => {
+    setAddStandardOpen(false);
+    setCreateStandardOpen(true);
   };
 
   const handleRemoveStandardFromClass = async (standard) => {
@@ -289,6 +305,59 @@ export default function ClassPage() {
         standard.id,
       ),
     );
+  };
+
+  //adding standard handlers
+  const handleCreateStandardAndLink = async ({ code, text }) => {
+    if (!user) throw new Error("Not signed in.");
+
+    const cleanCode = code.trim();
+    const cleanText = text.trim();
+    const standardId = normalizeCode(cleanCode);
+
+    // 1) Create standard (prevent duplicates)
+    const standardRef = doc(db, "teachers", user.uid, "standards", standardId);
+    const existing = await getDoc(standardRef);
+
+    if (existing.exists()) {
+      throw new Error(
+        `Code "${cleanCode}" already exists. Choose a different code.`,
+      );
+    }
+
+    await setDoc(
+      standardRef,
+      {
+        code: cleanCode,
+        text: cleanText,
+        createdAt: serverTimestamp(),
+        sortIndex: Date.now(),
+      },
+      { merge: false },
+    );
+
+    // 2) Link standard into this class
+    const joinRef = doc(
+      db,
+      "teachers",
+      user.uid,
+      "classes",
+      classId,
+      "classStandards",
+      standardId,
+    );
+
+    await setDoc(
+      joinRef,
+      {
+        standardId,
+        linkedAt: serverTimestamp(),
+        sortIndex: Date.now(),
+      },
+      { merge: false },
+    );
+
+    setCreateStandardOpen(false);
   };
 
   return (
@@ -336,7 +405,7 @@ export default function ClassPage() {
         {/* Standards section */}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4>Standards</h4>
-          <button type="button" onClick={() => setStandardModalOpen(true)}>
+          <button type="button" onClick={() => setAddStandardOpen(true)}>
             Add Standard
           </button>
         </div>
@@ -358,10 +427,19 @@ export default function ClassPage() {
         )}
       </section>
       <AddStandardToClassModal
-        open={standardModalOpen}
-        onClose={() => setStandardModalOpen(false)}
+        open={addStandardOpen}
+        onClose={() => setAddStandardOpen(false)}
         standards={availableStandardsToLink}
         onLink={handleLinkStandard}
+        onCreateNew={openCreateStandard}
+      />
+
+      <StandardModal
+        isOpen={createStandardOpen}
+        mode="add"
+        initialValue={null}
+        onClose={() => setCreateStandardOpen(false)}
+        onSubmit={handleCreateStandardAndLink}
       />
     </div>
   );
