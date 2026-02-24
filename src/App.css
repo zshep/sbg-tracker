@@ -466,3 +466,42 @@ select {
   align-items: center;
   gap: 8px;
 }
+
+/* Mastery cell colors */
+.mcell {
+  border-radius: 10px;
+}
+
+.mcell--empty {
+  background: transparent;
+  color: #666;
+  font-weight: 400;
+}
+
+/* 1 red */
+.mcell--1 {
+  background: rgba(192, 57, 43, 0.18);
+  color: #7a1f18;
+  border: 1px solid rgba(192, 57, 43, 0.25);
+}
+
+/* 2 yellow */
+.mcell--2 {
+  background: rgba(241, 196, 15, 0.22);
+  color: #6a5200;
+  border: 1px solid rgba(241, 196, 15, 0.28);
+}
+
+/* 3 blue */
+.mcell--3 {
+  background: rgba(52, 152, 219, 0.18);
+  color: #0f3f63;
+  border: 1px solid rgba(52, 152, 219, 0.26);
+}
+
+/* 4 green */
+.mcell--4 {
+  background: rgba(46, 204, 113, 0.18);
+  color: #0f4a2a;
+  border: 1px solid rgba(46, 204, 113, 0.26);
+}

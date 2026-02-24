@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   doc,
   onSnapshot,
@@ -86,6 +86,8 @@ export default function ClassPage() {
 
   const [classStandardLinks, setClassStandardLinks] = useState([]); // join docs
   const [classStandardsLoading, setClassStandardsLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const linkedStandardIds = useMemo(
     () => new Set(classStandardLinks.map((l) => l.id)),
@@ -366,6 +368,13 @@ export default function ClassPage() {
         <h3>{klass.className}</h3>
         <p>Period: {klass.classPeriod}</p>
         {/*<p>ClassId: {classId}</p> */}
+        <button
+          type="button"
+          className="btn"
+          onClick={() => navigate(`/class/${classId}/mastery`)}
+        >
+          Mastery Grid
+        </button>
       </header>
 
       {/*Students Section */}

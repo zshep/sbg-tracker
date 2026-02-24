@@ -31,7 +31,7 @@ function App() {
 
             <Route path="/class/:classId" element={<ClassPage />} />
             <Route path="/class/:classId/standard/:standardId" element={<ScoringPage/>} />
-
+            <Route path="/class/:classId/mastery" element={<MasteryGrid />} />
             <Route
               path="/classes/:classId/studentpage"
               element={<StudentPage />}
