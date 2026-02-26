@@ -28,12 +28,13 @@ function App() {
             <Route path="/standard/:standardId" element={<StandardPage />} />
             <Route path="/evidence" element={<Evidence />} />
             <Route path="/studentlist" element={<StudentList />} />
+            
 
             <Route path="/class/:classId" element={<ClassPage />} />
             <Route path="/class/:classId/standard/:standardId" element={<ScoringPage/>} />
             <Route path="/class/:classId/mastery" element={<MasteryGrid />} />
             <Route
-              path="/classes/:classId/studentpage"
+              path="/classes/:classId/studentpage/:studentId"
               element={<StudentPage />}
             />
           </Route>

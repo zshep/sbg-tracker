@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function StudentCard({ classId, student, onDelete }) {
+export default function StudentCard({ classId, student, onDelete, studentId }) {
   return (
     <div className="student-card">
       <div className="student-card-top">
@@ -9,7 +9,7 @@ export default function StudentCard({ classId, student, onDelete }) {
         </div>
 
         <div className="student-card-actions">
-          <Link className="btn small" to={`/classes/${classId}/students`}>
+          <Link className="btn small" to={`/classes/${classId}/studentpage/${studentId}`}>
             View student
           </Link>
 

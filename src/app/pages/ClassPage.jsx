@@ -395,6 +395,7 @@ export default function ClassPage() {
                 classId={classId}
                 student={s}
                 onDelete={handleDeleteStudent}
+                studentId={s.id}
               />
             ))}
           </div>
