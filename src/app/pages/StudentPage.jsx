@@ -235,9 +235,9 @@ export default function StudentPage() {
       qRef,
       (snap) => {
         const rows = [];
-        console.log("snap:", snap);
+        //console.log("snap:", snap);
         snap.forEach((d) => rows.push({ id: d.id, ...d.data() }));
-        console.log("Scores from query:", rows);
+        //console.log("Scores from query:", rows);
         setScores(rows);
       },
       (e) => {
