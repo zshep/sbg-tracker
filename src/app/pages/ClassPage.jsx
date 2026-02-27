@@ -243,6 +243,8 @@ export default function ClassPage() {
     await addDoc(studentsRef, {
       name,
       createdAt: serverTimestamp(),
+      classId,
+      period: klass.classPeriod,
     });
 
     setModalOpen(false);
