@@ -321,7 +321,7 @@ export default function StudentPage() {
           <button
             type="button"
             className="btn"
-            onClick={() => navigate(`/classes/${classId}`)}
+            onClick={() => navigate(`/class/${classId}`)}
           >
             ← Back to class
           </button>
