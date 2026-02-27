@@ -26,16 +26,17 @@ function safeNum(x) {
 }
 
 /**
- * Pick the newest score (by timestamp) from a list of score docs
- * Each score doc should have { level, timestamp }
+ * Pick the newest score (by scoredAt) from a list of score docs
+ * Each score doc should have { level, scoredAt }
  */
 function newestScore(scores) {
   if (!scores?.length) return null;
   // scores are often already ordered desc, but don't trust it blindly
+  console.log("scores:", scores);
   let best = scores[0];
   for (const s of scores) {
-    const tBest = best?.timestamp?.toMillis?.() ?? 0;
-    const t = s?.timestamp?.toMillis?.() ?? 0;
+    const tBest = best?.scoredAt?.toMillis?.() ?? 0;
+    const t = s?.scoredAt?.toMillis?.() ?? 0;
     if (t > tBest) best = s;
   }
   return best ?? null;
@@ -91,7 +92,7 @@ export default function StudentPage() {
       (snap) =>
         setStudent(snap.exists() ? { id: snap.id, ...snap.data() } : null),
       (e) => {
-        console.error("Scores listener error:", e);
+        console.error("stduents listener error:", e);
         console.error("code:", e.code);
         console.error("message:", e.message);
         console.error("name:", e.name);
@@ -122,7 +123,7 @@ export default function StudentPage() {
         setStandards(rows);
       },
       (e) => {
-        console.error("Scores listener error:", e);
+        console.error("Standards listener error:", e);
         console.error("code:", e.code);
         console.error("message:", e.message);
         console.error("name:", e.name);
@@ -200,7 +201,7 @@ export default function StudentPage() {
           publish();
         },
         (e) => {
-          console.error("Scores listener error:", e);
+          console.error("evidence listener error:", e);
           console.error("code:", e.code);
           console.error("message:", e.message);
           console.error("name:", e.name);
@@ -234,7 +235,9 @@ export default function StudentPage() {
       qRef,
       (snap) => {
         const rows = [];
+        console.log("snap:", snap);
         snap.forEach((d) => rows.push({ id: d.id, ...d.data() }));
+        console.log("Scores from query:", rows);
         setScores(rows);
       },
       (e) => {
@@ -355,7 +358,7 @@ export default function StudentPage() {
                   {/* Left: Standard title + link */}
                   <div className="standard-row-left">
                     <Link
-                      to={`/classes/${classId}/standard/${stId}`}
+                      to={`/class/${classId}/standard/${stId}`}
                       className="standard-title-link"
                       style={{ textDecoration: "none" }}
                     >
