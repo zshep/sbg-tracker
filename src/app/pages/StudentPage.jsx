@@ -228,7 +228,7 @@ export default function StudentPage() {
     const qRef = query(
       collection(db, "teachers", user.uid, "classes", classId, "scores"),
       where("studentId", "==", studentId),
-      orderBy("scoreAt", "desc"),
+      orderBy("scoredAt", "desc"),
     );
 
     return onSnapshot(
