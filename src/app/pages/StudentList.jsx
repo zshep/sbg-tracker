@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   collection,
   doc,
+  where,
   onSnapshot,
   query,
   orderBy,
@@ -52,7 +53,10 @@ export default function StudentListPage() {
   useEffect(() => {
     if (!user) return;
 
-    const qRef = query(collectionGroup(db, "students"), orderBy("name", "asc"));
+    const qRef = query(
+          collectionGroup(db, "students"), 
+          where("teacherId", "==", user.uid),
+          orderBy("name", "asc"));
 
     return onSnapshot(
       qRef,

@@ -245,6 +245,7 @@ export default function ClassPage() {
       createdAt: serverTimestamp(),
       classId,
       period: klass.classPeriod,
+      teacherId: user.uid,
     });
 
     setModalOpen(false);
