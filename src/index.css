@@ -1,23 +1,42 @@
 :root {
+  /* Typography */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  /* simple tokens you’ll reuse */
-  --bg: #f7f7f8;
-  --text: #111;
-  --card: #fff;
-  --border: #e5e5e5;
-  --muted: #555;
-  --primary: #111;
-  --primaryText: #fff;
-
+  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Design tokens */
+  --bg: #f7f7f8;
+  --text: #111827;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+
+  --primary: #111827;
+  --primaryText: #ffffff;
+
+  /* Optional: consistent radii */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+
+  /* Optional: spacing + shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-* { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
 
 body {
   margin: 0;
@@ -26,10 +45,51 @@ body {
   color: var(--text);
 }
 
+/* Links */
 a {
   color: inherit;
   text-decoration: none;
 }
 a:hover {
   text-decoration: underline;
+}
+
+/* Headings: remove weird default margins */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+/* Paragraph baseline */
+p {
+  margin: 0;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inputs inherit your font */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* A11y: make focus visible without being ugly */
+:focus-visible {
+  outline: 3px solid rgba(17, 24, 39, 0.35);
+  outline-offset: 2px;
+}
+
+/* Optional: reduce animation for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

@@ -26,11 +26,17 @@ export default function AddStandardToClassModal({
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
       <div className="modal" onMouseDown={(e) => e.stopPropagation()}>
-        <h3>Add Standard</h3>
+        <div className="modal__header">
+          <h3 className="modal__title">Add Standard</h3>
+          <button className="btn btn-ghost" type="button" onClick={onClose}>
+            ✕
+          </button>
+        </div>
 
-        <form onSubmit={handleSubmit} className="modal-form">
-          <label>
-            Select existing standard
+        <form onSubmit={handleSubmit} className="modal__body">
+          <div className="field">
+            <div className="field__label">Select existing standard</div>
+
             <select
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
@@ -43,9 +49,9 @@ export default function AddStandardToClassModal({
                 </option>
               ))}
             </select>
-          </label>
+          </div>
 
-          <div className="modal-actions-row">
+          <div className="modal__footer modal__footer--between">
             <button type="button" className="btn" onClick={onCreateNew}>
               Create New Standard
             </button>
