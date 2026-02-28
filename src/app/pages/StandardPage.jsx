@@ -219,7 +219,7 @@ export default function StandardPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <h1>Standard</h1>
+        <h2>Standard</h2>
       </header>
 
       <section className="section">
