@@ -38,22 +38,27 @@ export default function AddStandardToClassModal({
               <option value="">-- choose one --</option>
               {standards.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.code} — {s.text.length > 50 ? s.text.slice(0, 50) + "…" : s.text}
+                  {s.code} —{" "}
+                  {s.text.length > 50 ? s.text.slice(0, 50) + "…" : s.text}
                 </option>
               ))}
             </select>
           </label>
 
-          <div className="modal-actions" style={{ justifyContent: "space-between" }}>
+          <div className="modal-actions-row">
             <button type="button" className="btn" onClick={onCreateNew}>
               Create New Standard
             </button>
 
-            <div style={{ display: "flex", gap: 8 }}>
+            <div className="modal-actions-right">
               <button type="button" className="btn" onClick={onClose}>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary" disabled={!canSubmit}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!canSubmit}
+              >
                 Add
               </button>
             </div>

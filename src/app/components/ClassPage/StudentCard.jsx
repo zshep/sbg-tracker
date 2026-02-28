@@ -9,13 +9,16 @@ export default function StudentCard({ classId, student, onDelete, studentId }) {
         </div>
 
         <div className="student-card-actions">
-          <Link className="btn small" to={`/classes/${classId}/studentpage/${studentId}`}>
+          <Link
+            className="btn btn-sm"
+            to={`/classes/${classId}/studentpage/${studentId}`}
+          >
             View student
           </Link>
 
           <button
             type="button"
-            className="btn small danger"
+            className="btn btn-sm btn-danger"
             onClick={() => onDelete(student)}
           >
             Delete

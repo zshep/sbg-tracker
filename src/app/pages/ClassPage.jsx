@@ -39,24 +39,33 @@ function AddStudentModal({ open, onClose, onCreate }) {
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
       <div className="modal" onMouseDown={(e) => e.stopPropagation()}>
-        <h3>Add Student</h3>
+        <div className="modal__header">
+          <h3 style={{ margin: 0 }}>Add Student</h3>
+          <button className="btn btn-ghost" type="button" onClick={onClose}>
+            ✕
+          </button>
+        </div>
 
-        <form onSubmit={handleSubmit} className="modal-form">
-          <label>
-            Student name
+        <form onSubmit={handleSubmit} className="modal__body">
+          <div className="field">
+            <div className="field__label">Student name</div>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ada Lovelace"
               autoFocus
             />
-          </label>
+          </div>
 
-          <div className="modal-actions">
-            <button type="button" onClick={onClose}>
+          <div className="modal__footer">
+            <button className="btn" type="button" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" disabled={!canSubmit}>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={!canSubmit}
+            >
               Add
             </button>
           </div>
@@ -366,30 +375,41 @@ export default function ClassPage() {
   };
 
   return (
-    <div>
-      <header style={{ marginBottom: "12px" }}>
-        <h3>{klass.className}</h3>
-        <p>Period: {klass.classPeriod}</p>
-        {/*<p>ClassId: {classId}</p> */}
-        <button
-          type="button"
-          className="btn"
-          onClick={() => navigate(`/class/${classId}/mastery`)}
-        >
-          Mastery Grid
-        </button>
+    <div className="page">
+      <header className="page-header page-header--row">
+        <div>
+          <h2 className="page-title">{klass.className}</h2>
+          <p className="muted">Period: {klass.classPeriod}</p>
+        </div>
+
+        <div className="page-actions">
+          <button
+            type="button"
+            className="btn"
+            onClick={() => navigate(`/class/${classId}/mastery`)}
+          >
+            Mastery Grid
+          </button>
+        </div>
       </header>
 
-      {/*Students Section */}
-      <section style={{ marginTop: "16px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Students</h4>
+      {/* Students */}
+      <section className="section">
+        <div className="section__head section__head--row">
+          <h3 className="section__title">Students</h3>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setModalOpen(true)}
+          >
+            Add Student
+          </button>
         </div>
 
         {studentsLoading ? (
           <p>Loading students…</p>
         ) : students.length === 0 ? (
-          <p>No students yet.</p>
+          <p className="muted">No students yet.</p>
         ) : (
           <div className="student-list">
             {students.map((s) => (
@@ -403,10 +423,6 @@ export default function ClassPage() {
             ))}
           </div>
         )}
-
-        <button type="button" onClick={() => setModalOpen(true)}>
-          Add Student
-        </button>
       </section>
 
       <AddStudentModal
@@ -415,11 +431,15 @@ export default function ClassPage() {
         onCreate={handleAddStudent}
       />
 
-      <section style={{ marginTop: "16px" }}>
-        {/* Standards section */}
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4>Standards</h4>
-          <button type="button" onClick={() => setAddStandardOpen(true)}>
+      {/* Standards */}
+      <section className="section">
+        <div className="section__head section__head--row">
+          <h3 className="section__title">Standards</h3>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setAddStandardOpen(true)}
+          >
             Add Standard
           </button>
         </div>
@@ -427,9 +447,9 @@ export default function ClassPage() {
         {allStandardsLoading || classStandardsLoading ? (
           <p>Loading standards…</p>
         ) : linkedStandards.length === 0 ? (
-          <p>No standards linked to this class yet.</p>
+          <p className="muted">No standards linked to this class yet.</p>
         ) : (
-          <div style={{ display: "grid", gap: "12px" }}>
+          <div className="stack">
             {linkedStandards.map((st) => (
               <ClassStandardRow
                 key={st.id}
@@ -441,6 +461,7 @@ export default function ClassPage() {
           </div>
         )}
       </section>
+
       <AddStandardToClassModal
         open={addStandardOpen}
         onClose={() => setAddStandardOpen(false)}

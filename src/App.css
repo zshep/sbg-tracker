@@ -3,7 +3,52 @@
   
 }
 
-/* Home styling */
+/* ---------- Layout helpers ---------- */
+
+.page-title {
+  margin: 0;
+}
+
+.page-header--row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.stack {
+  display: grid;
+  gap: 12px;
+}
+
+/* Button size */
+.btn-sm {
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* Modal action rows (for AddStandardToClassModal) */
+.modal-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+
+/* ---------------- Home styling ---------------- */
 .home {
   padding-top: 64px;
   text-align: center;
@@ -56,9 +101,9 @@
   gap: 10px;
 }
 
-/* Nav bar Styling */
+/* ---------------- Nav bar Styling ---------------- */
 .sidebar {
-  height: 100vh;
+  height: 100%;
   position: sticky;
   top: 0;
   width: 220px;
@@ -180,7 +225,41 @@
   color: #6b7280;
 }
 
-/* Classes Styling  */
+/* ---------------- Dashboard Layout ---------------- */
+
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+/* ---------------- Classes ---------------- */
+
+.section {
+  margin-top: 8px;
+}
+
+.section__head {
+  margin: 16px 0 12px;
+}
+
+.section__head--row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.section__title {
+  margin: 0;
+}
+
 .class-list {
   display: grid;
   gap: 12px;
@@ -188,9 +267,10 @@
 }
 
 .class-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--card);
 }
 
 .class-card-top {
@@ -200,54 +280,24 @@
   gap: 12px;
 }
 
+.class-card-main {
+  min-width: 0;
+}
+
+.class-card-title {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.class-card-subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
 .class-card-actions {
   display: flex;
   gap: 10px;
   align-items: center;
-}
-
-button.danger {
-  background: #c0392b;
-  color: white;
-  border: none;
-  padding: 8px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: grid;
-  place-items: center;
-  padding: 20px;
-}
-
-.modal {
-  width: min(480px, 100%);
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.modal-form {
-  display: grid;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.modal-form input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 6px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 6px;
 }
 
 
@@ -292,11 +342,7 @@ button.btn.small.danger {
 }
 
 /* Standards Styles */
-.page {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 24px;
-}
+
 
 .page-header {
   display: flex;

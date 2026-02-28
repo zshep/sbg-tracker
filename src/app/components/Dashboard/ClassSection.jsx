@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   collection,
   addDoc,
@@ -10,79 +9,84 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../../services/firebase/firebase"; 
+import { db } from "../../services/firebase/firebase";
 import { useAuth } from "../../context/AuthContext";
 
 import ClassCard from "./ClassCard";
 
-
 //add class modal
-    function AddClassModal({ open, onClose, onCreate }) {
-      const [className, setClassName] = useState("");
-      const [classPeriod, setClassPeriod] = useState("");
-    
-      useEffect(() => {
-        if (!open) {
-          setClassName("");
-          setClassPeriod("");
-        }
-      }, [open]);
-    
-      if (!open) return null;
-    
-      const canSubmit =
-        className.trim().length > 0 && classPeriod.trim().length > 0;
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!canSubmit) return;
-    
-        onCreate({
-          className: className.trim(),
-          classPeriod: classPeriod.trim(),
-        });
-        
+function AddClassModal({ open, onClose, onCreate }) {
+  const [className, setClassName] = useState("");
+  const [classPeriod, setClassPeriod] = useState("");
 
-      };
-    
-      return (
-        <div className="modal-backdrop" onMouseDown={onClose}>
-          <div className="modal" onMouseDown={(e) => e.stopPropagation()}>
-            <h3>Add Class</h3>
-    
-            <form onSubmit={handleSubmit} className="modal-form">
-              <label>
-                Class Name
-                <input
-                  value={className}
-                  onChange={(e) => setClassName(e.target.value)}
-                  placeholder="Physics"
-                />
-              </label>
-    
-              <label>
-                Period
-                <input
-                  value={classPeriod}
-                  onChange={(e) => setClassPeriod(e.target.value)}
-                  placeholder="1"
-                />
-              </label>
-    
-              <div className="modal-actions">
-                <button type="button" onClick={onClose}>
-                  Cancel
-                </button>
-                <button type="submit" disabled={!canSubmit}>
-                  Create
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      );
+  useEffect(() => {
+    if (!open) {
+      setClassName("");
+      setClassPeriod("");
     }
+  }, [open]);
 
+  if (!open) return null;
+
+  const canSubmit =
+    className.trim().length > 0 && classPeriod.trim().length > 0;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+
+    onCreate({
+      className: className.trim(),
+      classPeriod: classPeriod.trim(),
+    });
+  };
+
+  return (
+    <div className="modal-backdrop" onMouseDown={onClose}>
+      <div className="modal" onMouseDown={(e) => e.stopPropagation()}>
+        <div className="modal__header">
+          <h3 style={{ margin: 0 }}>Add Class</h3>
+          <button className="btn btn-ghost" type="button" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="modal__body">
+          <div className="field">
+            <div className="field__label">Class Name</div>
+            <input
+              value={className}
+              onChange={(e) => setClassName(e.target.value)}
+              placeholder="Physics"
+            />
+          </div>
+
+          <div className="field">
+            <div className="field__label">Period</div>
+            <input
+              value={classPeriod}
+              onChange={(e) => setClassPeriod(e.target.value)}
+              placeholder="1"
+            />
+          </div>
+
+          <div className="modal__footer">
+            <button className="btn" type="button" onClick={onClose}>
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={!canSubmit}
+            >
+              Create
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default function ClassSection() {
   const { user, loading } = useAuth();
@@ -124,42 +128,42 @@ export default function ClassSection() {
 
   const handleDelete = async (klass) => {
     const ok = window.confirm(
-      `Delete "${klass.className}" (Period ${klass.classPeriod})?`
+      `Delete "${klass.className}" (Period ${klass.classPeriod})?`,
     );
     if (!ok) return;
 
-    await deleteDoc(
-      doc(db, "teachers", user.uid, "classes", klass.id)
-    );
+    await deleteDoc(doc(db, "teachers", user.uid, "classes", klass.id));
   };
 
   return (
-    <div>
-      <h3>Classes</h3>
+    <section className="section">
+      <div className="section__head section__head--row">
+        <h3 className="section__title">Classes</h3>
+
+        <button
+          onClick={() => setOpen(true)}
+          type="button"
+          className="btn btn-primary"
+        >
+          Add Class
+        </button>
+      </div>
 
       {classes.length === 0 ? (
-        <p>No classes yet.</p>
+        <p className="muted">No classes yet.</p>
       ) : (
         <div className="class-list">
           {classes.map((klass) => (
-            <ClassCard
-              key={klass.id}
-              klass={klass}
-              onDelete={handleDelete}
-            />
+            <ClassCard key={klass.id} klass={klass} onDelete={handleDelete} />
           ))}
         </div>
       )}
-
-      <button onClick={() => setOpen(true)} type="button">
-        Add Class
-      </button>
 
       <AddClassModal
         open={open}
         onClose={() => setOpen(false)}
         onCreate={handleCreate}
       />
-    </div>
+    </section>
   );
 }
