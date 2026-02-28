@@ -9,7 +9,6 @@ export default function NavBar() {
     () => [
       { to: "/dashboard", label: "Classes", icon: "🏫" },
       { to: "/standardslist", label: "Standards", icon: "🎯" },
-      { to: "/evidence", label: "Evidence", icon: "🧾" },
       { to: "/studentlist", label: "Students", icon: "👥" },
     ],
     []
