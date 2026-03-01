@@ -1,3 +1,19 @@
+:root {
+  --bg: #f7f7f8;
+  --text: #111827;
+
+  --border: #e5e7eb;
+  --card: #ffffff;
+  --muted: #6b7280;
+
+  --primary: #2563eb;
+  --primaryText: #ffffff;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
 #root {
   min-height: 100vh;
   
