@@ -21,7 +21,9 @@ createRoot(document.getElementById("root")).render(
     </div>
 
     <AuthProvider>
-      <App />
+      <div style={{ padding: 20, fontFamily: "sans-serif" }}>
+        INSIDE PROVIDER: I render
+      </div>
     </AuthProvider>
   </StrictMode>
 );
