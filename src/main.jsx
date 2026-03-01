@@ -1,49 +1,12 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { AuthProvider } from "./app/context/AuthContext.jsx";
-import "./index.css";
-import App from "./App.jsx";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { AuthProvider } from "./app/context/AuthContext";
 
-console.log("DEPLOY MARKER: b01fa7c"); 
-
-window.addEventListener("error", (e) => {
-  console.log("WINDOW ERROR:", e.error || e.message);
-});
-
-window.addEventListener("unhandledrejection", (e) => {
-  console.log("UNHANDLED REJECTION:", e.reason);
-});
-
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
-      CANARY: React mounted
-    </div>
-
-    <AuthProvider>
-      <div style={{ padding: 20, fontFamily: "sans-serif" }}>
-        INSIDE PROVIDER: I render
-      </div>
-    </AuthProvider>
-  </StrictMode>
-);
-
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
     <AuthProvider>
       <App />
     </AuthProvider>
-  </StrictMode>,
+  </React.StrictMode>
 );
-
-/*
-//debugging
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <div style={{ padding: 20 }}>SBG Tracker is rendering.</div>
-  </StrictMode>
-);
-*/
