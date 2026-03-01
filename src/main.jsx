@@ -4,7 +4,7 @@ import { AuthProvider } from "./app/context/AuthContext.jsx";
 import "./index.css";
 import App from "./App.jsx";
 
-
+console.log("DEPLOY MARKER: b01fa7c"); 
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
