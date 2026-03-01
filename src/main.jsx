@@ -6,6 +6,14 @@ import App from "./App.jsx";
 
 console.log("DEPLOY MARKER: b01fa7c"); 
 
+window.addEventListener("error", (e) => {
+  console.log("WINDOW ERROR:", e.error || e.message);
+});
+
+window.addEventListener("unhandledrejection", (e) => {
+  console.log("UNHANDLED REJECTION:", e.reason);
+});
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
