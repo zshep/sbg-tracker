@@ -16,12 +16,24 @@ window.addEventListener("unhandledrejection", (e) => {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
+      CANARY: React mounted
+    </div>
+
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </StrictMode>
+);
+/*
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
     <AuthProvider>
       <App />
     </AuthProvider>
   </StrictMode>,
 );
-
+*/
 /*
 //debugging
 import { StrictMode } from "react";
