@@ -1,4 +1,6 @@
 import { useAuth } from "./app/context/AuthContext";
+import { signInAnonymously } from "firebase/auth";
+import { auth } from "./app/services/firebase/firebase";
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -8,6 +10,9 @@ export default function App() {
       <div>APP CANARY: App rendered</div>
       <div>loading: {String(loading)}</div>
       <div>user: {user ? user.uid : "null"}</div>
+      <button onClick={() => signInAnonymously(auth)}>
+  Anonymous sign-in
+</button>
     </div>
   );
 }
