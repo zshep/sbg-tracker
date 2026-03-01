@@ -2,28 +2,24 @@ import { Link } from "react-router-dom";
 
 export default function StudentListCard({ student, classId, className, period }) {
   return (
-    <div
-      className="student-list-card"
-      style={{
-        border: "1px solid rgba(0,0,0,0.1)",
-        borderRadius: 12,
-        padding: 12,
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-        <div>
-          <div style={{ fontWeight: 800 }}>{student?.name ?? "Unnamed student"}</div>
-          <div style={{ opacity: 0.75, fontSize: 13 }}>
+    <div className="student-list-card">
+      <div className="student-list-card__row">
+        <div className="student-list-card__main">
+          <div className="student-list-card__name">
+            {student?.name ?? "Unnamed student"}
+          </div>
+
+          <div className="student-list-card__meta">
             Class:{" "}
-            <Link to={`/classes/${classId}`} style={{ fontWeight: 700 }}>
+            <Link to={`/classes/${classId}`} className="student-list-card__classLink">
               {className ?? "View class"}
             </Link>
             {period ? ` • Period ${period}` : ""}
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: 8 }}>
-          <Link className="btn small" to={`/classes/${classId}/studentpage/${student.id}`}>
+        <div className="student-list-card__actions">
+          <Link className="btn btn-sm" to={`/classes/${classId}/studentpage/${student.id}`}>
             View
           </Link>
         </div>

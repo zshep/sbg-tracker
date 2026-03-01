@@ -306,18 +306,18 @@ export default function StudentPage() {
   if (!student) return <p>Student not found.</p>;
 
   return (
-    <div className="page">
+    <div className="page studentPage">
       {/* --- header --- */}
-      <div className="page-head">
+      <header className="studentPage__head page-header page-header--row">
         <div>
-          <h2 style={{ marginBottom: 4 }}>{student.name}</h2>
-          <p style={{ marginTop: 0, opacity: 0.8 }}>
+          <h1 className="page-title studentPage__title">{student.name}</h1>
+          <p className="studentPage__meta">
             Class: <strong>{klass.className ?? "Untitled class"}</strong>
-            {klass.period ? ` • Period ${klass.period}` : ""}
+            {klass.classPeriod ? ` • Period ${klass.classPeriod}` : ""}
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: 8 }}>
+        <div className="page-actions">
           <button
             type="button"
             className="btn"
@@ -326,21 +326,20 @@ export default function StudentPage() {
             ← Back to class
           </button>
         </div>
-      </div>
+      </header>
 
       {/* --- standards rows --- */}
-      <div className="card">
-        <div className="card-top">
-          <h3 style={{ margin: 0 }}>Standards</h3>
-          <p style={{ margin: 0, opacity: 0.7 }}>
-            One row per standard. Overall is “most recent score” for that
-            standard.
+      <section className="studentPage__card">
+        <div className="studentPage__cardTop">
+          <h2 className="studentPage__cardTitle">Standards</h2>
+          <p className="studentPage__cardHint">
+            Overall is “most recent score” for that standard.
           </p>
         </div>
 
-        <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
+        <div className="studentPage__rows">
           {standards.length === 0 ? (
-            <p style={{ opacity: 0.8 }}>No standards yet.</p>
+            <p className="muted">No standards yet.</p>
           ) : (
             standards.map((st) => {
               const stId = st.id;
@@ -354,32 +353,31 @@ export default function StudentPage() {
                   : `${overallLevel} • ${levelToLabel(overallLevel)}`;
 
               return (
-                <div key={stId} className="standard-row">
+                <div key={stId} className="studentPage__standardRow">
                   {/* Left: Standard title + link */}
-                  <div className="standard-row-left">
+                  <div className="studentPage__standardLeft">
                     <Link
                       to={`/class/${classId}/standard/${stId}`}
-                      className="standard-title-link"
-                      style={{ textDecoration: "none" }}
+                      className="studentPage__standardLink"
                     >
-                      <div style={{ fontWeight: 700 }}>
+                      <div className="studentPage__standardTitle">
                         {st.code ? `${st.code} — ` : ""}
                         {st.text ?? "Untitled standard"}
                       </div>
-                      <div style={{ fontSize: 13, opacity: 0.75 }}>
+                      <div className="studentPage__standardSub">
                         Click to score →
                       </div>
                     </Link>
                   </div>
 
                   {/* Middle: Evidence “mini boxes” */}
-                  <div className="standard-row-graph">
+                  <div className="studentPage__standardGraph">
                     {evs.length === 0 ? (
-                      <div style={{ opacity: 0.7, fontSize: 13 }}>
+                      <div className="studentPage__noEvidence">
                         No evidence for this standard yet.
                       </div>
                     ) : (
-                      <div className="evidence-strip">
+                      <div className="studentPage__evidenceStrip">
                         {evs.map((ev) => {
                           const sc =
                             viewModel.newestScoreByEvidence.get(ev.id) ?? null;
@@ -388,17 +386,17 @@ export default function StudentPage() {
                           return (
                             <div
                               key={ev.id}
-                              className="evidence-box"
+                              className="studentPage__evidenceBox"
                               title={`${ev.title ?? "Evidence"}: ${
                                 lvl == null ? "—" : lvl
                               }`}
                             >
-                              <div className="evidence-box-top">
-                                <span className="evidence-title">
+                              <div className="studentPage__evidenceBoxTop">
+                                <span className="studentPage__evidenceTitle">
                                   {ev.title ?? "Evidence"}
                                 </span>
                               </div>
-                              <div className="evidence-level">
+                              <div className="studentPage__evidenceLevel">
                                 {lvl == null ? "—" : lvl}
                               </div>
                             </div>
@@ -409,34 +407,16 @@ export default function StudentPage() {
                   </div>
 
                   {/* Right: Overall */}
-                  <div className="standard-row-overall">
-                    <div className="overall-label">Overall</div>
-                    <div className="overall-badge">{overallText}</div>
+                  <div className="studentPage__overall">
+                    <div className="studentPage__overallLabel">Overall</div>
+                    <div className="studentPage__overallBadge">{overallText}</div>
                   </div>
                 </div>
               );
             })
           )}
         </div>
-      </div>
-
-      {/* Minimal styles (move to CSS file later) */}
-      <style>{`
-        .page { padding: 16px; }
-        .page-head { display:flex; align-items:flex-start; justify-content:space-between; gap: 12px; margin-bottom: 16px; }
-        .card { padding: 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; }
-        .card-top { display:flex; align-items:baseline; justify-content:space-between; gap: 12px; }
-        .standard-row { display:grid; grid-template-columns: 280px 1fr 160px; gap: 12px; align-items: stretch; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 12px; }
-        .standard-row-left { display:flex; align-items:center; }
-        .standard-row-graph { display:flex; align-items:center; overflow:hidden; }
-        .standard-row-overall { display:flex; flex-direction:column; justify-content:center; align-items:flex-end; gap: 6px; }
-        .overall-label { font-size: 12px; opacity: 0.7; }
-        .overall-badge { font-weight: 700; padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.15); }
-        .evidence-strip { display:flex; gap: 8px; overflow-x:auto; padding-bottom: 4px; }
-        .evidence-box { min-width: 120px; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 8px; display:flex; flex-direction:column; justify-content:space-between; }
-        .evidence-title { font-size: 12px; opacity: 0.8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
-        .evidence-level { font-size: 18px; font-weight: 800; text-align:right; }
-      `}</style>
+      </section>
     </div>
   );
 }

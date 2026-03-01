@@ -934,3 +934,285 @@ select {
     padding: 16px;
   }
 }
+
+/* ---------------- Student List Page ---------------- */
+
+.studentList {
+  padding: 16px;
+}
+
+.studentList__header {
+  margin-bottom: 12px;
+}
+
+.studentList__meta {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.studentList__search {
+  min-width: 280px;
+  display: grid;
+  gap: 8px;
+}
+
+.studentList__searchLabel {
+  display: block;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.studentList__sections {
+  display: grid;
+  gap: 16px;
+}
+
+.studentList__sectionCard {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--card);
+}
+
+.studentList__sectionHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.studentList__classLink {
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.studentList__classLink:hover {
+  text-decoration: underline;
+}
+
+.studentList__period {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.studentList__count {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.studentList__cards {
+  display: grid;
+  gap: 10px;
+}
+
+/* ---------------- Student List Card ---------------- */
+
+.student-list-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--card);
+}
+
+.student-list-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-list-card__main {
+  min-width: 0;
+}
+
+.student-list-card__name {
+  font-weight: 800;
+}
+
+.student-list-card__meta {
+  opacity: 0.75;
+  font-size: 13px;
+}
+
+.student-list-card__classLink {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.student-list-card__classLink:hover {
+  text-decoration: underline;
+}
+
+.student-list-card__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ---------------- Student Page ---------------- */
+
+.studentPage {
+  padding: 16px;
+}
+
+.studentPage__head {
+  margin-bottom: 16px;
+}
+
+.studentPage__title {
+  margin: 0 0 4px;
+}
+
+.studentPage__meta {
+  margin: 0;
+  color: var(--muted);
+}
+
+.studentPage__card {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--card);
+}
+
+.studentPage__cardTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.studentPage__cardTitle {
+  margin: 0;
+  font-size: 18px;
+}
+
+.studentPage__cardHint {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 13px;
+}
+
+.studentPage__rows {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.studentPage__standardRow {
+  display: grid;
+  grid-template-columns: 280px 1fr 160px;
+  gap: 12px;
+  align-items: stretch;
+
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--card);
+}
+
+.studentPage__standardLeft {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.studentPage__standardLink {
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.studentPage__standardLink:hover .studentPage__standardTitle {
+  text-decoration: underline;
+}
+
+.studentPage__standardTitle {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.studentPage__standardSub {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+.studentPage__standardGraph {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.studentPage__noEvidence {
+  opacity: 0.7;
+  font-size: 13px;
+}
+
+.studentPage__evidenceStrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.studentPage__evidenceBox {
+  min-width: 120px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  padding: 8px;
+  background: var(--card);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.studentPage__evidenceTitle {
+  font-size: 12px;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.studentPage__evidenceLevel {
+  font-size: 18px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.studentPage__overall {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.studentPage__overallLabel {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.studentPage__overallBadge {
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: var(--card);
+}
+
+/* Responsive: stack columns on small screens */
+@media (max-width: 900px) {
+  .studentPage__standardRow {
+    grid-template-columns: 1fr;
+  }
+  .studentPage__overall {
+    align-items: flex-start;
+  }
+}

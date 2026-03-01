@@ -30,7 +30,7 @@ export default function StudentListPage() {
 
     const qRef = query(
       collection(db, "teachers", user.uid, "classes"),
-      orderBy("createdAt", "asc")
+      orderBy("createdAt", "asc"),
     );
 
     return onSnapshot(
@@ -41,7 +41,7 @@ export default function StudentListPage() {
       (e) => {
         console.error("Classes listener error:", e);
         setErr(`${e.code ?? "error"}: ${e.message ?? "Failed to load classes."}`);
-      }
+      },
     );
   }, [user]);
 
@@ -58,7 +58,7 @@ export default function StudentListPage() {
     const qRef = query(
       collectionGroup(db, "students"),
       where("teacherId", "==", user.uid),
-      orderBy("name", "asc")
+      orderBy("name", "asc"),
     );
 
     return onSnapshot(
@@ -83,7 +83,7 @@ export default function StudentListPage() {
       (e) => {
         console.error("Students listener error:", e);
         setErr(`${e.code ?? "error"}: ${e.message ?? "Failed to load students."}`);
-      }
+      },
     );
   }, [user]);
 
@@ -92,15 +92,11 @@ export default function StudentListPage() {
     const term = normalize(search);
     if (!term) return students;
 
-    return students.filter((s) => {
-      const name = normalize(s.name);
-      return name.includes(term);
-    });
+    return students.filter((s) => normalize(s.name).includes(term));
   }, [students, search]);
 
   // --- group by class (with class sorting) ---
   const grouped = useMemo(() => {
-    // classId -> students[]
     const groups = new Map();
 
     for (const s of filteredStudents) {
@@ -109,21 +105,14 @@ export default function StudentListPage() {
       groups.get(cid).push(s);
     }
 
-    // turn into sorted array of sections
     const sections = Array.from(groups.entries()).map(([classId, kids]) => {
       const klass = classById.get(classId);
       const className = klass?.className ?? "Unknown class";
       const period = klass?.classPeriod ?? klass?.period ?? "";
 
-      return {
-        classId,
-        className,
-        period,
-        students: kids,
-      };
+      return { classId, className, period, students: kids };
     });
 
-    // sort classes by period then name (tweak as you like)
     sections.sort((a, b) => {
       const pa = normalize(a.period);
       const pb = normalize(b.period);
@@ -136,106 +125,66 @@ export default function StudentListPage() {
 
   if (loading) return <p>Loading…</p>;
   if (!user) return <p>Auth error. Please refresh.</p>;
-  if (err) return <p style={{ color: "crimson" }}>{err}</p>;
+  if (err) return <p className="error">{err}</p>;
 
   return (
-    <div className="page" style={{ padding: 16 }}>
-      {/* Header */}
-      <div
-        className="page-head"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 12,
-          alignItems: "flex-end",
-          marginBottom: 12,
-        }}
-      >
+    <div className="page studentList">
+      <header className="page-header page-header--row studentList__header">
         <div>
-          <h2 style={{ marginBottom: 4 }}>All Students</h2>
-          <p style={{ marginTop: 0, opacity: 0.8 }}>
+          <h1 className="page-title">All Students</h1>
+          <p className="studentList__meta">
             {students.length} student{students.length === 1 ? "" : "s"} •{" "}
             {classes.length} class{classes.length === 1 ? "" : "es"}
           </p>
         </div>
 
-        {/* Search */}
-        <div style={{ minWidth: 280 }}>
-          <label style={{ display: "block", fontSize: 13, opacity: 0.8 }}>
-            Search
-          </label>
+        <div className="studentList__search">
+          <label className="studentList__searchLabel">Search</label>
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Type a student name…"
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              borderRadius: 10,
-              border: "1px solid rgba(0,0,0,0.15)",
-            }}
           />
           {search ? (
             <button
               type="button"
-              className="btn small"
+              className="btn btn-sm"
               onClick={() => setSearch("")}
-              style={{ marginTop: 8 }}
             >
               Clear
             </button>
           ) : null}
         </div>
-      </div>
+      </header>
 
-      {/* Body */}
       {grouped.length === 0 ? (
-        <p style={{ opacity: 0.8 }}>
-          {search ? "No matches." : "No students yet."}
-        </p>
+        <p className="muted">{search ? "No matches." : "No students yet."}</p>
       ) : (
-        <div style={{ display: "grid", gap: 16 }}>
+        <div className="studentList__sections">
           {grouped.map((section) => (
-            <div
-              key={section.classId}
-              style={{
-                border: "1px solid rgba(0,0,0,0.08)",
-                borderRadius: 12,
-                padding: 12,
-              }}
-            >
-              {/* Class header */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "baseline",
-                  gap: 12,
-                  marginBottom: 10,
-                }}
-              >
+            <div key={section.classId} className="studentList__sectionCard">
+              <div className="studentList__sectionHead">
                 <div>
                   <Link
                     to={`/classes/${section.classId}`}
-                    style={{ fontWeight: 800, textDecoration: "none" }}
+                    className="studentList__classLink"
                   >
                     {section.className}
                   </Link>
                   {section.period ? (
-                    <div style={{ fontSize: 13, opacity: 0.75 }}>
+                    <div className="studentList__period">
                       Period {section.period}
                     </div>
                   ) : null}
                 </div>
 
-                <div style={{ fontSize: 13, opacity: 0.75 }}>
+                <div className="studentList__count">
                   {section.students.length} student
                   {section.students.length === 1 ? "" : "s"}
                 </div>
               </div>
 
-              {/* Students in class */}
-              <div style={{ display: "grid", gap: 10 }}>
+              <div className="studentList__cards">
                 {section.students.map((s) => (
                   <StudentListCard
                     key={`${section.classId}_${s.id}`}
