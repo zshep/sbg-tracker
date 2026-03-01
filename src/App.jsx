@@ -1,3 +1,18 @@
+import { useAuth } from "./app/context/AuthContext";
+
+export default function App() {
+  const { user, loading } = useAuth();
+
+  return (
+    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
+      <div>APP CANARY: App rendered</div>
+      <div>loading: {String(loading)}</div>
+      <div>user: {user ? user.uid : "null"}</div>
+    </div>
+  );
+}
+
+/*
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./app/context/RequireAuth";
 import "./App.css";
@@ -43,3 +58,4 @@ function App() {
 }
 
 export default App;
+/*
