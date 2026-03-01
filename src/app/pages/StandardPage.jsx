@@ -223,15 +223,8 @@ export default function StandardPage() {
       </header>
 
       <section className="section">
-        <div
-          className="section__head"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2>Details</h2>
+        <div className="section__head section__head--row">
+          <h2 className="section__title">Details</h2>
           {standard ? (
             <button
               type="button"
@@ -250,7 +243,7 @@ export default function StandardPage() {
         {!loadingStandard && standard ? (
           <div className="standard-detail">
             <div className="standard-card__code">{standard.code}</div>
-            <div className="standard-card__text" style={{ marginTop: 10 }}>
+            <div className="standard-card__text standard-detail__text">
               {standard.text}
             </div>
           </div>
@@ -259,7 +252,7 @@ export default function StandardPage() {
 
       <div className="evidence-toolbar">
         <div className="filter-row">
-          <label className="field" style={{ margin: 0, minWidth: 220 }}>
+          <label className="field evidence-toolbar__field evidence-toolbar__field--type">
             <span className="field__label">Filter by type</span>
             <select
               value={typeFilter}
@@ -274,7 +267,7 @@ export default function StandardPage() {
             </select>
           </label>
 
-          <label className="field" style={{ margin: 0, flex: 1 }}>
+          <label className="field evidence-toolbar__field evidence-toolbar__field--search">
             <span className="field__label">Search</span>
             <input
               value={search}
@@ -286,12 +279,11 @@ export default function StandardPage() {
           {(typeFilter !== "all" || search) && (
             <button
               type="button"
-              className="btn"
+              className="btn evidence-toolbar__clear"
               onClick={() => {
                 setTypeFilter("all");
                 setSearch("");
               }}
-              style={{ alignSelf: "end" }}
             >
               Clear
             </button>
@@ -300,15 +292,8 @@ export default function StandardPage() {
       </div>
 
       <section className="section">
-        <div
-          className="section__head"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2>Evidence</h2>
+        <div className="section__head section__head--row">
+          <h2 className="section__title">Evidence</h2>
           <button
             type="button"
             className="btn btn-primary"
@@ -319,10 +304,6 @@ export default function StandardPage() {
         </div>
 
         {loadingEvidence ? <p>Loading evidence...</p> : null}
-
-        {!loadingEvidence && evidence.length === 0 ? (
-          <p>No evidence yet for this standard.</p>
-        ) : null}
 
         {!loadingEvidence && evidence.length === 0 ? (
           <p>No evidence yet for this standard.</p>

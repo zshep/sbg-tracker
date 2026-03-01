@@ -59,7 +59,14 @@ export default function ScoringPage() {
   useEffect(() => {
     if (!user || !classId) return;
 
-    const ref = collection(db, "teachers", user.uid, "classes", classId, "students");
+    const ref = collection(
+      db,
+      "teachers",
+      user.uid,
+      "classes",
+      classId,
+      "students",
+    );
     const q = query(ref, orderBy("createdAt", "asc"));
 
     return onSnapshot(q, (snap) => {
@@ -71,7 +78,14 @@ export default function ScoringPage() {
   useEffect(() => {
     if (!user || !standardId) return;
 
-    const ref = collection(db, "teachers", user.uid, "standards", standardId, "evidence");
+    const ref = collection(
+      db,
+      "teachers",
+      user.uid,
+      "standards",
+      standardId,
+      "evidence",
+    );
     const q = query(ref, orderBy("createdAt", "desc"));
 
     return onSnapshot(q, (snap) => {
@@ -84,7 +98,11 @@ export default function ScoringPage() {
       }
 
       // If the selected evidence got deleted, reset
-      if (selectedEvidenceId && rows.length > 0 && !rows.find((r) => r.id === selectedEvidenceId)) {
+      if (
+        selectedEvidenceId &&
+        rows.length > 0 &&
+        !rows.find((r) => r.id === selectedEvidenceId)
+      ) {
         setSelectedEvidenceId(rows[0].id);
       }
       if (rows.length === 0) setSelectedEvidenceId("");
@@ -100,11 +118,18 @@ export default function ScoringPage() {
       return;
     }
 
-    const scoresRef = collection(db, "teachers", user.uid, "classes", classId, "scores");
+    const scoresRef = collection(
+      db,
+      "teachers",
+      user.uid,
+      "classes",
+      classId,
+      "scores",
+    );
     const q = query(
       scoresRef,
       where("standardId", "==", standardId),
-      where("evidenceId", "==", selectedEvidenceId)
+      where("evidenceId", "==", selectedEvidenceId),
     );
 
     return onSnapshot(
@@ -127,13 +152,13 @@ export default function ScoringPage() {
       (err) => {
         console.error(err);
         setExistingScores({});
-      }
+      },
     );
   }, [user, classId, standardId, selectedEvidenceId]);
 
   const selectedEvidence = useMemo(
     () => evidence.find((e) => e.id === selectedEvidenceId) || null,
-    [evidence, selectedEvidenceId]
+    [evidence, selectedEvidenceId],
   );
 
   const setScoreForStudent = (studentId, level) => {
@@ -149,7 +174,7 @@ export default function ScoringPage() {
       return;
     }
 
-    // Gather changed scores only 
+    // Gather changed scores only
     const changes = [];
     for (const s of students) {
       const studentId = s.id;
@@ -177,7 +202,15 @@ export default function ScoringPage() {
 
       changes.forEach(({ studentId, level }) => {
         const scoreDocId = `${selectedEvidenceId}__${studentId}`; // deterministic => update same doc
-        const ref = doc(db, "teachers", user.uid, "classes", classId, "scores", scoreDocId);
+        const ref = doc(
+          db,
+          "teachers",
+          user.uid,
+          "classes",
+          classId,
+          "scores",
+          scoreDocId,
+        );
 
         batch.set(
           ref,
@@ -188,7 +221,7 @@ export default function ScoringPage() {
             level,
             scoredAt: serverTimestamp(),
           },
-          { merge: true }
+          { merge: true },
         );
       });
 
@@ -209,32 +242,38 @@ export default function ScoringPage() {
 
   return (
     <div className="page">
-      <header className="page-header" style={{ display: "flex", justifyContent: "space-between" }}>
+      <header className="page-header page-header--row">
         <div>
-          <h1>Scoring</h1>
+          <h1 className="page-title">Scoring</h1>
           {klass ? (
-            <p style={{ marginTop: 4 }}>
+            <p className="scoring-subtitle">
               {klass.className} — Period {klass.classPeriod}
             </p>
           ) : null}
         </div>
 
-        <button type="button" className="btn" onClick={() => navigate(`/class/${classId}`)}>
-          Back to Class
-        </button>
+        <div className="page-actions">
+          <button
+            type="button"
+            className="btn"
+            onClick={() => navigate(`/class/${classId}`)}
+          >
+            Back to Class
+          </button>
+        </div>
       </header>
 
       <section className="section">
         <div className="section__head">
-          <h2>Standard</h2>
+          <h2 className="section__title">Standard</h2>
         </div>
 
         {!standard ? (
-          <p>Standard not found.</p>
+          <p className="muted">Standard not found.</p>
         ) : (
           <div className="standard-detail">
             <div className="standard-card__code">{standard.code}</div>
-            <div className="standard-card__text" style={{ marginTop: 10 }}>
+            <div className="standard-card__text standard-detail__text">
               {standard.text}
             </div>
           </div>
@@ -242,23 +281,27 @@ export default function ScoringPage() {
       </section>
 
       <section className="section">
-        <div className="section__head" style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2>Evidence</h2>
+        <div className="section__head">
+          <h2 className="section__title">Evidence</h2>
         </div>
 
         {evidence.length === 0 ? (
+          <div className="stack">
+            <p className="muted">
+              No evidence exists for this standard yet. Go add evidence first.
+            </p>
             <div>
-          <p>No evidence exists for this standard yet. Go add evidence first.</p>
-          <button
-          type="button"
-          className="btn"
-          onClick={() => navigate(`/standard/${standard.id}`)}
-        >
-          View Standard
-        </button>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => navigate(`/standard/${standard.id}`)}
+              >
+                View Standard
+              </button>
+            </div>
           </div>
         ) : (
-          <div style={{ display: "grid", gap: 10, maxWidth: 520 }}>
+          <div className="scoring-evidencePicker">
             <label className="field">
               <span className="field__label">Pick evidence</span>
               <select
@@ -277,7 +320,7 @@ export default function ScoringPage() {
             </label>
 
             {selectedEvidence ? (
-              <div style={{ fontSize: 14, opacity: 0.8 }}>
+              <div className="scoring-evidenceHint">
                 Scoring: <strong>{selectedEvidence.title}</strong>
               </div>
             ) : null}
@@ -286,9 +329,15 @@ export default function ScoringPage() {
       </section>
 
       <section className="section">
-        <div className="section__head" style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2>Scores</h2>
-          <button type="button" className="btn btn-primary" onClick={handleSave} disabled={saving || !selectedEvidenceId}>
+        <div className="section__head section__head--row">
+          <h2 className="section__title">Scores</h2>
+
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleSave}
+            disabled={saving || !selectedEvidenceId}
+          >
             {saving ? "Saving..." : "Save Scores"}
           </button>
         </div>
@@ -296,29 +345,29 @@ export default function ScoringPage() {
         {error ? <p className="error">{error}</p> : null}
 
         {students.length === 0 ? (
-          <p>No students in this class yet.</p>
+          <p className="muted">No students in this class yet.</p>
         ) : !selectedEvidenceId ? (
-          <p>Select an evidence item to start scoring.</p>
+          <p className="muted">Select an evidence item to start scoring.</p>
         ) : (
-          <div className="scores-list" style={{ display: "grid", gap: 10 }}>
+          <div className="scores-list">
             {students.map((s) => {
               const existing = existingScores[s.id];
               const value = draftScores[s.id] ?? existing ?? "";
 
               return (
-                <div key={s.id} className="score-row" style={{ display: "flex", justifyContent: "space-between", gap: 12, border: "1px solid #e5e5e5", borderRadius: 10, padding: 12 }}>
-                  <div style={{ display: "grid" }}>
-                    <strong>{s.name}</strong>
-                    <span style={{ fontSize: 12, opacity: 0.75 }}>
+                <div key={s.id} className="score-row">
+                  <div className="score-row__main">
+                    <strong className="score-row__name">{s.name}</strong>
+                    <span className="score-row__hint">
                       {existing ? `Current: ${existing}` : "No score yet"}
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div className="score-row__actions">
                     <select
+                      className="score-row__select"
                       value={value}
                       onChange={(e) => setScoreForStudent(s.id, e.target.value)}
-                      style={{ width: 90 }}
                     >
                       <option value="">--</option>
                       <option value="1">1</option>

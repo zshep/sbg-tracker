@@ -5,6 +5,13 @@
 
 /* ---------- Layout helpers ---------- */
 
+.page {
+  width: 100%;
+  max-width: 800px; 
+  margin: 0 auto;
+  padding: 24px;
+}
+
 .page-title {
   margin: 0;
 }
@@ -32,6 +39,41 @@
   padding: 6px 10px;
   border-radius: 10px;
   font-size: 14px;
+}
+
+/* Shared list row style (students, standards, etc.) */
+.row-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--card);
+
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.row-card__main {
+  min-width: 0;
+}
+
+.row-card__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.row-card__subtitle {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.row-card__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 /* ------------- Modal Stylings -------------- */
@@ -365,28 +407,11 @@
   margin-top: 10px;
 }
 
-.student-card {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-  background: var(--card);
-}
-
-.student-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-
-.student-card-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
 
 .student-name {
   margin: 0;
+  font-size: 17px;
+  font-weight: 100;
 }
 
 
@@ -433,7 +458,6 @@
 }
 
 .standard-card__text {
-  align-self: flex-start;
   line-height: 1.35;
 }
 
@@ -518,23 +542,57 @@ input:disabled {
   cursor: grabbing;
 }
 
-/* StandardPage styling - for evidence */
+/* ---------- Evidence toolbar helpers ---------- */
+
+.evidence-toolbar__field {
+  margin: 0;
+}
+
+.evidence-toolbar__field--type {
+  min-width: 220px;
+}
+
+.evidence-toolbar__field--search {
+  flex: 1;
+}
+
+.evidence-toolbar__clear {
+  align-self: flex-end;
+}
+
+
+
+select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font: inherit;
+  background: var(--card);
+  color: var(--text);
+}
+
+/* ---------------- Evidence ---------------- */
+
 .evidence-list {
   display: grid;
   gap: 12px;
 }
 
 .evidence-card {
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   padding: 14px;
+  background: var(--card);
+
   display: flex;
   justify-content: space-between;
   gap: 12px;
+  align-items: center;
 }
 
 .evidence-card__title {
   line-height: 1.35;
+  font-weight: 600;
 }
 
 .evidence-card__actions {
@@ -543,15 +601,7 @@ input:disabled {
   align-items: center;
 }
 
-select {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font: inherit;
-  background: white;
-}
-
-
+/* Toolbar */
 .evidence-toolbar {
   display: grid;
   gap: 10px;
@@ -561,31 +611,10 @@ select {
 .filter-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-.chip {
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 999px;
-  cursor: pointer;
-  font: inherit;
-}
-
-.chip--active {
-  border-color: #111;
-  background: #111;
-  color: #fff;
-}
-
-.evidence-toolbar .filter-row {
-  display: flex;
   gap: 12px;
   align-items: end;
-  flex-wrap: wrap;
 }
+
 
 /* Pill styling */
 .pill {
@@ -640,31 +669,119 @@ select {
   border-color: #ddd;
 } 
 
-/* class Standard card styling */
-.standard-row {
+/* ---------------- Mastery Grid ---------------- */
+
+.page--wide {
+  max-width: 1200px;
+}
+
+.mastery-subtitle {
+  margin-top: 4px;
+}
+
+.mastery-tableWrap {
+  overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
   background: var(--card);
 }
 
-.standard-row__code {
+/* Table base */
+.mastery-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+/* Header cells */
+.mastery-th {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--card);
+}
+
+.mastery-th--student {
+  text-align: left;
+}
+
+/* Clickable header button */
+.mastery-thBtn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
   font-weight: 700;
-  margin-bottom: 6px;
+  text-decoration: underline;
+  white-space: nowrap;
 }
 
-.standard-row__text {
-  line-height: 1.35;
+.mastery-thBtn:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
-.standard-row__actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* Body cells */
+.mastery-td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
+
+.mastery-td--student {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mastery-td--cell {
+  text-align: center;
+  font-weight: 700;
+}
+
+/* tighten the last row border */
+.mastery-table tbody tr:last-child .mastery-td {
+  border-bottom: 0;
+}
+
+/* --- Sticky first column (Student) --- */
+
+/* make sure sticky has something to stick against */
+.mastery-tableWrap {
+  position: relative;
+}
+
+/* sticky first header cell */
+.mastery-th--student {
+  position: sticky;
+  left: 0;
+  z-index: 3;                 /* above body cells */
+  background: var(--card);
+}
+
+/* sticky first body cells */
+.mastery-td--student {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--card);
+}
+
+/* Control student column width */
+.mastery-th--student,
+.mastery-td--student {
+  width: 180px;        /* try 160–200px */
+  max-width: 180px;
+}
+
+/* add a subtle divider so the frozen column is obvious */
+.mastery-th--student,
+.mastery-td--student {
+  box-shadow: 8px 0 0 rgba(0, 0, 0, 0.04);
+}
+
 
 /* Mastery cell colors */
 .mcell {
@@ -705,4 +822,110 @@ select {
   border: 1px solid rgba(46, 204, 113, 0.26);
 }
 
-/* ----------------- Student Individual Page styling ------------------ */
+/* clickable student name */
+.mastery-studentBtn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  width: 100%;
+}
+
+.mastery-studentBtn:hover {
+  text-decoration: underline;
+}
+
+.mastery-table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* ---------------- Scoring Page ---------------- */
+
+.muted {
+  color: var(--muted);
+}
+
+.scoring-subtitle {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.standard-detail {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--card);
+}
+
+.standard-detail__text {
+  margin-top: 10px;
+}
+
+.scoring-evidencePicker {
+  display: grid;
+  gap: 10px;
+  max-width: 520px;
+}
+
+.scoring-evidenceHint {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Scores list */
+.scores-list {
+  display: grid;
+  gap: 10px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--card);
+  align-items: center;
+}
+
+.score-row__main {
+  display: grid;
+  min-width: 0;
+}
+
+.score-row__name {
+  font-weight: 700;
+}
+
+.score-row__hint {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.score-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-row__select {
+  width: 90px;
+}
+
+.score-row:hover {
+  border-color: rgba(0,0,0,0.12);
+}
+
+
+@media (max-width: 640px) {
+  .page {
+    padding: 16px;
+  }
+}

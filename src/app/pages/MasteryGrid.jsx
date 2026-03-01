@@ -139,72 +139,73 @@ export default function MasteryGrid() {
 
   //csv file helpers
   function csvEscape(value) {
-  const s = value === null || value === undefined ? "" : String(value);
-  // Wrap in quotes if it contains comma, quote, or newline
-  if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-  return s;
-}
+    const s = value === null || value === undefined ? "" : String(value);
+    // Wrap in quotes if it contains comma, quote, or newline
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  }
 
-const handleExportCsv = () => {
-  // Header: Student Name, then each standard code
-  const header = ["Student", ...standards.map((st) => st.code)];
+  const handleExportCsv = () => {
+    // Header: Student Name, then each standard code
+    const header = ["Student", ...standards.map((st) => st.code)];
 
-  const rows = students.map((stu) => {
-    const cells = [stu.name];
+    const rows = students.map((stu) => {
+      const cells = [stu.name];
 
-    standards.forEach((st) => {
-      const key = `${stu.id}__${st.id}`;
-      const level = mastery.get(key);
-      cells.push(level ?? "");
+      standards.forEach((st) => {
+        const key = `${stu.id}__${st.id}`;
+        const level = mastery.get(key);
+        cells.push(level ?? "");
+      });
+
+      return cells;
     });
 
-    return cells;
-  });
+    const lines = [header, ...rows]
+      .map((row) => row.map(csvEscape).join(","))
+      .join("\n");
 
-  const lines = [header, ...rows]
-    .map((row) => row.map(csvEscape).join(","))
-    .join("\n");
+    const blob = new Blob([lines], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
 
-  const blob = new Blob([lines], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
+    const safeClass = (klass?.className || "class")
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9_-]/g, "");
 
-  const safeClass = (klass?.className || "class")
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/[^a-zA-Z0-9_-]/g, "");
+    const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const safePeriod = klass?.classPeriod
+      ? String(klass.classPeriod)
+          .trim()
+          .replace(/\s+/g, "_")
+          .replace(/[^a-zA-Z0-9_-]/g, "")
+      : "";
 
-  const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const safePeriod = klass?.classPeriod
-  ? String(klass.classPeriod).trim().replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_-]/g, "")
-  : "";
+    const filename = `${safeClass}${safePeriod ? "_P" + safePeriod : ""}_mastery_${date}.csv`;
 
-const filename = `${safeClass}${safePeriod ? "_P" + safePeriod : ""}_mastery_${date}.csv`;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-
-  URL.revokeObjectURL(url);
-};
+    URL.revokeObjectURL(url);
+  };
 
   return (
-    <div className="page">
-      <header
-        className="page-header"
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
+    <div className="page page--wide">
+      <header className="page-header page-header--row">
         <div>
-          <h1>Mastery</h1>
+          <h1 className="page-title">Mastery</h1>
           {klass ? (
-            <p style={{ marginTop: 4 }}>
+            <p className="muted mastery-subtitle">
               {klass.className} — Period {klass.classPeriod}
             </p>
           ) : null}
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
+
+        <div className="page-actions">
           <button
             type="button"
             className="btn"
@@ -212,6 +213,7 @@ const filename = `${safeClass}${safePeriod ? "_P" + safePeriod : ""}_mastery_${d
           >
             Back to Class
           </button>
+
           <button
             type="button"
             className="btn btn-primary"
@@ -223,51 +225,30 @@ const filename = `${safeClass}${safePeriod ? "_P" + safePeriod : ""}_mastery_${d
         </div>
       </header>
 
-      {students.length === 0 ? <p>No students yet.</p> : null}
+      {students.length === 0 ? <p className="muted">No students yet.</p> : null}
       {standards.length === 0 ? (
-        <p>No standards linked to this class yet.</p>
+        <p className="muted">No standards linked to this class yet.</p>
       ) : null}
 
       {students.length > 0 && standards.length > 0 ? (
-        <div style={{ overflowX: "auto" }}>
-          <table
-            className="mastery-table"
-            style={{ borderCollapse: "collapse", minWidth: 700 }}
-          >
+        <div className="mastery-tableWrap">
+          <table className="mastery-table">
             <thead>
               <tr>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: 10,
-                    borderBottom: "1px solid #e5e5e5",
-                  }}
-                >
-                  Student
-                </th>
+                <th className="mastery-th mastery-th--student">Student</th>
+
                 {standards.map((st) => (
-                  <th
-                    key={st.id}
-                    onClick={() =>
-                      navigate(`/class/${classId}/standard/${st.id}`)
-                    }
-                    style={{
-                      padding: 10,
-                      borderBottom: "1px solid #e5e5e5",
-                      whiteSpace: "nowrap",
-                      cursor: "pointer",
-                      transition: "background 0.15s ease",
-                      textDecoration: "underline",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#f5f5f5")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "transparent")
-                    }
-                    title="Click to score this standard"
-                  >
-                    {st.code}
+                  <th key={st.id} className="mastery-th">
+                    <button
+                      type="button"
+                      className="mastery-thBtn"
+                      onClick={() =>
+                        navigate(`/class/${classId}/standard/${st.id}`)
+                      }
+                      title="Click to score this standard"
+                    >
+                      {st.code}
+                    </button>
                   </th>
                 ))}
               </tr>
@@ -276,19 +257,22 @@ const filename = `${safeClass}${safePeriod ? "_P" + safePeriod : ""}_mastery_${d
             <tbody>
               {students.map((stu) => (
                 <tr key={stu.id}>
-                  <td
-                    style={{
-                      padding: 10,
-                      borderBottom: "1px solid #f0f0f0",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {stu.name}
+                  <td className="mastery-td mastery-td--student">
+                    <button
+                      type="button"
+                      className="mastery-studentBtn"
+                      onClick={() =>
+                        navigate(`/classes/${classId}/studentpage/${stu.id}`)
+                      }
+                    >
+                      {stu.name}
+                    </button>
                   </td>
 
                   {standards.map((st) => {
                     const key = `${stu.id}__${st.id}`;
                     const level = mastery.get(key);
+
                     const cls =
                       level === 1
                         ? "mcell mcell--1"
@@ -303,13 +287,7 @@ const filename = `${safeClass}${safePeriod ? "_P" + safePeriod : ""}_mastery_${d
                     return (
                       <td
                         key={st.id}
-                        className={cls}
-                        style={{
-                          padding: 10,
-                          borderBottom: "1px solid #f0f0f0",
-                          textAlign: "center",
-                          fontWeight: 700,
-                        }}
+                        className={`mastery-td mastery-td--cell ${cls}`}
                       >
                         {level ?? "—"}
                       </td>
