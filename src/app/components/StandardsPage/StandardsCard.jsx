@@ -47,7 +47,10 @@ export default function StandardsCard({ standard, onDelete }) {
         <button
           type="button"
           className="btn"
-          onClick={() => navigate(`/standard/${id}`)}
+          onClick={() => {
+            if (isDragging) return;
+            navigate(`/standard/${id}`);
+          }}
         >
           View
         </button>
@@ -55,7 +58,10 @@ export default function StandardsCard({ standard, onDelete }) {
         <button
           type="button"
           className="btn btn-danger"
-          onClick={() => onDelete(id)}
+          onClick={() => {
+            if (isDragging) return;
+            onDelete(id);
+          }}
         >
           Delete
         </button>

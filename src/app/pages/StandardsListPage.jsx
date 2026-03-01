@@ -44,7 +44,7 @@ export default function StandardsListPage() {
     if (!teacherId) return null;
     return query(
       collection(db, "teachers", teacherId, "standards"),
-      orderBy("sortIndex", "asc")
+      orderBy("sortIndex", "asc"),
     );
   }, [teacherId]);
 
@@ -67,7 +67,7 @@ export default function StandardsListPage() {
         console.error(err);
         setStandards([]);
         setLoading(false);
-      }
+      },
     );
 
     return () => unsub();
@@ -86,7 +86,9 @@ export default function StandardsListPage() {
     const existing = await getDoc(ref);
 
     if (existing.exists()) {
-      throw new Error(`Code "${cleanCode}" already exists. Choose a different code.`);
+      throw new Error(
+        `Code "${cleanCode}" already exists. Choose a different code.`,
+      );
     }
 
     await setDoc(
@@ -97,7 +99,7 @@ export default function StandardsListPage() {
         createdAt: serverTimestamp(),
         sortIndex: Date.now(),
       },
-      { merge: false }
+      { merge: false },
     );
   };
 
@@ -108,7 +110,7 @@ export default function StandardsListPage() {
     const label = standard ? `${standard.code} — ${standard.text}` : standardId;
 
     const confirmed = window.confirm(
-      `Delete this standard?\n\n${label}\n\nThis cannot be undone.`
+      `Delete this standard?\n\n${label}\n\nThis cannot be undone.`,
     );
     if (!confirmed) return;
 
@@ -149,12 +151,14 @@ export default function StandardsListPage() {
 
   return (
     <div className="page">
-      <header className="page-header">
-        <h1>Standards</h1>
+      <header className="page-header page-header--row">
+        <h1 className="page-title">Standards</h1>
 
-        <button className="btn btn-primary" onClick={openAdd}>
-          Add Standard
-        </button>
+        <div className="page-actions">
+          <button className="btn btn-primary" onClick={openAdd}>
+            Add Standard
+          </button>
+        </div>
       </header>
 
       <section className="section">
@@ -168,8 +172,14 @@ export default function StandardsListPage() {
           <p>No standards yet. Add your first one.</p>
         ) : null}
 
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={standardIds} strategy={verticalListSortingStrategy}>
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={standardIds}
+            strategy={verticalListSortingStrategy}
+          >
             <div className="standards-list">
               {standards.map((s) => (
                 <StandardsCard

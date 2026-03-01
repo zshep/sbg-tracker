@@ -459,6 +459,8 @@
 
 .standard-card__text {
   line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn {
@@ -526,6 +528,7 @@ input:disabled {
 .standard-card.is-dragging {
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   border-color: #ccc;
+  user-select: none;
 }
 
 .drag-handle {
@@ -541,6 +544,8 @@ input:disabled {
 .drag-handle:active {
   cursor: grabbing;
 }
+
+
 
 /* ---------- Evidence toolbar helpers ---------- */
 
