@@ -1,4 +1,4 @@
-/* import { StrictMode } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthProvider } from "./app/context/AuthContext.jsx";
 import "./index.css";
@@ -15,8 +15,7 @@ createRoot(document.getElementById("root")).render(
   </StrictMode>,
 );
 
-*/
-
+/*
 //debugging
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -26,3 +25,4 @@ createRoot(document.getElementById("root")).render(
     <div style={{ padding: 20 }}>SBG Tracker is rendering.</div>
   </StrictMode>
 );
+*/
