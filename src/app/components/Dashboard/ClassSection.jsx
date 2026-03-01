@@ -8,11 +8,19 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "../../services/firebase/firebase";
 import { useAuth } from "../../context/AuthContext";
 
-import ClassCard from "./ClassCard";
+import SortableClassCard from "../ClassPage/SortableClassCard";
+
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
 
 //add class modal
 function AddClassModal({ open, onClose, onCreate }) {
@@ -94,11 +102,13 @@ export default function ClassSection() {
   const [classes, setClasses] = useState([]);
   const [open, setOpen] = useState(false);
 
+  const classIds = classes.map((c) => c.id);
+
   useEffect(() => {
     if (!user) return;
 
     const classesRef = collection(db, "teachers", user.uid, "classes");
-    const q = query(classesRef, orderBy("createdAt", "desc"));
+    const q = query(classesRef, orderBy("order", "asc"));
 
     const unsub = onSnapshot(q, (snap) => {
       const rows = snap.docs.map((d) => ({
@@ -121,6 +131,7 @@ export default function ClassSection() {
       className,
       classPeriod,
       createdAt: serverTimestamp(),
+      order: classes.length, // append
     });
 
     setOpen(false);
@@ -133,6 +144,28 @@ export default function ClassSection() {
     if (!ok) return;
 
     await deleteDoc(doc(db, "teachers", user.uid, "classes", klass.id));
+  };
+
+  
+  const handleDragEnd = async ({ active, over }) => {
+    if (!over) return;
+    if (active.id === over.id) return;
+
+    const oldIndex = classes.findIndex((c) => c.id === active.id);
+    const newIndex = classes.findIndex((c) => c.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const next = arrayMove(classes, oldIndex, newIndex);
+    setClasses(next);
+
+    // persist order
+    const batch = writeBatch(db);
+    next.forEach((klass, idx) => {
+      batch.update(doc(db, "teachers", user.uid, "classes", klass.id), {
+        order: idx,
+      });
+    });
+    await batch.commit();
   };
 
   return (
@@ -152,11 +185,25 @@ export default function ClassSection() {
       {classes.length === 0 ? (
         <p className="muted">No classes yet.</p>
       ) : (
-        <div className="class-list">
-          {classes.map((klass) => (
-            <ClassCard key={klass.id} klass={klass} onDelete={handleDelete} />
-          ))}
-        </div>
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={classIds}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="class-list">
+              {classes.map((klass) => (
+                <SortableClassCard
+                  key={klass.id}
+                  klass={klass}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
 
       <AddClassModal
