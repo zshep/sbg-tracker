@@ -1,3 +1,13 @@
+export default function Dashboard() {
+  return (
+    <div>
+      <h1>DASHBOARD CANARY</h1>
+      <p>If you see this, routing + layout are fine.</p>
+    </div>
+  );
+}
+
+/*
 import { useAuth } from "../context/AuthContext";
 import ClassSection from "../components/Dashboard/ClassSection";
 
@@ -16,3 +26,4 @@ export default function Dashboard() {
     </div>
   );
 }
+  */

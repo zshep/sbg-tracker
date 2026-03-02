@@ -13,6 +13,7 @@ import StudentList from "./app/pages/StudentList";
 import ScoringPage from "./app/pages/ScoringPage";
 
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
+import ErrorBoundary from "./app/components/ErrorBoundary";
 
 function App() {
   return (
@@ -21,9 +22,14 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route element={<RequireAuth />}>
-          <Route element={<DashboardLayout />}>
+          <Route
+            element={
+              <ErrorBoundary>
+                <DashboardLayout />
+              </ErrorBoundary>
+            }
+          >
             <Route path="/dashboard" element={<Dashboard />} />
-            
           </Route>
         </Route>
       </Routes>
@@ -32,7 +38,6 @@ function App() {
 }
 
 export default App;
-
 
 /*
 import { BrowserRouter, Routes, Route } from "react-router-dom";
