@@ -5,15 +5,9 @@ import "./App.css";
 import Home from "./app/pages/Home";
 import Dashboard from "./app/pages/Dashboard";
 import ClassPage from "./app/pages/ClassPage";
-import MasteryGrid from "./app/pages/MasteryGrid";
-import StandardsListPage from "./app/pages/StandardsListPage";
-import StandardPage from "./app/pages/StandardPage";
-import StudentPage from "./app/pages/StudentPage";
-import StudentList from "./app/pages/StudentList";
-import ScoringPage from "./app/pages/ScoringPage";
 
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
-import ErrorBoundary from "./app/components/ErrorBoundary";
+import ErrorBoundary from "./app/components/ErrorBoundary"; // <-- adjust path if different
 
 function App() {
   return (
@@ -30,6 +24,7 @@ function App() {
             }
           >
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/class/:classId" element={<ClassPage />} />
           </Route>
         </Route>
       </Routes>
