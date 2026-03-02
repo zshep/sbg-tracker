@@ -1,4 +1,15 @@
+export default function App() {
+  return (
+    <div style={{ padding: 24, fontFamily: "sans-serif" }}>
+      <h1>CANARY: JS is running</h1>
+      <p>If you see this, your bundle executed.</p>
+      <p>Time: {new Date().toISOString()}</p>
+    </div>
+  );
+}
 
+
+/*
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./app/context/RequireAuth";
 import "./App.css";
@@ -44,3 +55,4 @@ function App() {
 }
 
 export default App;
+*/
