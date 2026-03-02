@@ -9,6 +9,7 @@ export default function RequireAuth() {
   const [signingIn, setSigningIn] = useState(false);
   const triedRef = useRef(false);
   const [err, setErr] = useState(null);
+  const [authErr, setAuthErr] = useState(null);
 
   useEffect(() => {
     if (loading) return;
@@ -23,6 +24,7 @@ export default function RequireAuth() {
         await signInAnonymously(auth);
       } catch (e) {
         console.error("Anonymous sign-in failed:", e);
+        setAuthErr(String(e?.message || e));
         if (alive) setErr(e?.code || e?.message || String(e));
       } finally {
         if (alive) setSigningIn(false);
@@ -37,6 +39,7 @@ export default function RequireAuth() {
   if (loading || signingIn) return <p>Loading…</p>;
   if (err) return <p>Auth error: {err}</p>;
   if (!user) return <p>Auth error. Please refresh.</p>;
+  if (authErr) return <pre style={{whiteSpace:"pre-wrap"}}>{authErr}</pre>;
 
   return <Outlet />;
 }
