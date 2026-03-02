@@ -1,3 +1,18 @@
+
+import { useParams } from "react-router-dom";
+
+export default function ClassPage() {
+  const { classId } = useParams();
+  return (
+    <div>
+      <h1>CLASS CANARY</h1>
+      <p>classId: {classId}</p>
+    </div>
+  );
+}
+
+
+/*
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -393,7 +408,6 @@ export default function ClassPage() {
         </div>
       </header>
 
-      {/* Students */}
       <section className="section">
         <div className="section__head section__head--row">
           <h3 className="section__title">Students</h3>
@@ -431,7 +445,7 @@ export default function ClassPage() {
         onCreate={handleAddStudent}
       />
 
-      {/* Standards */}
+      
       <section className="section">
         <div className="section__head section__head--row">
           <h3 className="section__title">Standards</h3>
@@ -480,3 +494,4 @@ export default function ClassPage() {
     </div>
   );
 }
+*/
