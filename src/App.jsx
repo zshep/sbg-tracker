@@ -1,15 +1,16 @@
-import { BrowserRouter } from "react-router-dom";
+import { useAuth } from "./app/context/AuthContext";
 
 export default function App() {
+  const { user, loading } = useAuth();
+
   return (
-    <BrowserRouter>
-      <div style={{ padding: 24, fontFamily: "sans-serif" }}>
-        <h1>CANARY A: Router OK</h1>
-      </div>
-    </BrowserRouter>
+    <div style={{ padding: 24, fontFamily: "sans-serif" }}>
+      <h1>CANARY B: AuthContext OK</h1>
+      <div>loading: {String(loading)}</div>
+      <div>user: {user ? user.uid : "null"}</div>
+    </div>
   );
 }
-
 
 /*
 import { BrowserRouter, Routes, Route } from "react-router-dom";
