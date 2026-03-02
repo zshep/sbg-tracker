@@ -1,25 +1,38 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./app/context/RequireAuth";
+import "./App.css";
 
-function Authed() {
-  return (
-    <div style={{ padding: 24, fontFamily: "sans-serif" }}>
-      <h1>CANARY C: RequireAuth reached Outlet</h1>
-    </div>
-  );
-}
+import Home from "./app/pages/Home";
+import Dashboard from "./app/pages/Dashboard";
+import ClassPage from "./app/pages/ClassPage";
+import MasteryGrid from "./app/pages/MasteryGrid";
+import StandardsListPage from "./app/pages/StandardsListPage";
+import StandardPage from "./app/pages/StandardPage";
+import StudentPage from "./app/pages/StudentPage";
+import StudentList from "./app/pages/StudentList";
+import ScoringPage from "./app/pages/ScoringPage";
 
-export default function App() {
+import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
+
+function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Home />} />
+
         <Route element={<RequireAuth />}>
-          <Route path="*" element={<Authed />} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
+
+export default App;
+
 
 /*
 import { BrowserRouter, Routes, Route } from "react-router-dom";
