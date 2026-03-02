@@ -1,14 +1,23 @@
-import { useAuth } from "./app/context/AuthContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RequireAuth from "./app/context/RequireAuth";
 
-export default function App() {
-  const { user, loading } = useAuth();
-
+function Authed() {
   return (
     <div style={{ padding: 24, fontFamily: "sans-serif" }}>
-      <h1>CANARY B: AuthContext OK</h1>
-      <div>loading: {String(loading)}</div>
-      <div>user: {user ? user.uid : "null"}</div>
+      <h1>CANARY C: RequireAuth reached Outlet</h1>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RequireAuth />}>
+          <Route path="*" element={<Authed />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
