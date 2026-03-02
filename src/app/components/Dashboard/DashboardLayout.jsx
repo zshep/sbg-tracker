@@ -1,8 +1,10 @@
 import { Outlet } from "react-router-dom";
+import NavBar from "./NavBar";
 
 export default function DashboardLayout() {
   return (
     <div className="page">
+      <NavBar />
       <div>LAYOUT CANARY: DashboardLayout rendered</div>
       <Outlet />
     </div>
