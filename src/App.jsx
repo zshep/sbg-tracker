@@ -1,10 +1,12 @@
+import { BrowserRouter } from "react-router-dom";
+
 export default function App() {
   return (
-    <div style={{ padding: 24, fontFamily: "sans-serif" }}>
-      <h1>CANARY: JS is running</h1>
-      <p>If you see this, your bundle executed.</p>
-      <p>Time: {new Date().toISOString()}</p>
-    </div>
+    <BrowserRouter>
+      <div style={{ padding: 24, fontFamily: "sans-serif" }}>
+        <h1>CANARY A: Router OK</h1>
+      </div>
+    </BrowserRouter>
   );
 }
 
