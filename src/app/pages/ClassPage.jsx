@@ -1,18 +1,4 @@
 
-import { useParams } from "react-router-dom";
-
-export default function ClassPage() {
-  const { classId } = useParams();
-  return (
-    <div>
-      <h1>CLASS CANARY</h1>
-      <p>classId: {classId}</p>
-    </div>
-  );
-}
-
-
-/*
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -494,4 +480,3 @@ export default function ClassPage() {
     </div>
   );
 }
-*/
