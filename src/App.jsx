@@ -6,8 +6,9 @@ import Home from "./app/pages/Home";
 import Dashboard from "./app/pages/Dashboard";
 import ClassPage from "./app/pages/ClassPage";
 import StandardsListPage from "./app/pages/StandardsListPage";
+import StudentList from "./app/pages/StudentList";
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
-import ErrorBoundary from "./app/components/ErrorBoundary"; // <-- adjust path if different
+import ErrorBoundary from "./app/components/ErrorBoundary"; 
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/class/:classId" element={<ClassPage />} />
             <Route path="/standardslist" element={<StandardsListPage />} />
+            <Route path="/studentlist" element={<StudentList />} />
           </Route>
         </Route>
       </Routes>
