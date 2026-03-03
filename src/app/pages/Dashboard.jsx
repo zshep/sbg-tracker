@@ -12,6 +12,7 @@ export default function Dashboard() {
       <h1>DASHBOARD CANARY</h1>
       <p>If you see this, routing + layout are fine.</p>
         <h2>Dashboard</h2>
+        
         <p className="muted">Hello, {user.uid}</p>
       </header>
 
