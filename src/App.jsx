@@ -3,12 +3,13 @@ import RequireAuth from "./app/context/RequireAuth";
 import "./App.css";
 
 import Home from "./app/pages/Home";
+import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
 import Dashboard from "./app/pages/Dashboard";
 import ClassPage from "./app/pages/ClassPage";
 import MasteryGrid from "./app/pages/MasteryGrid";
 import StandardsListPage from "./app/pages/StandardsListPage";
 import StudentList from "./app/pages/StudentList";
-import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
+import ScoringPage from "./app/pages/ScoringPage";
 import ErrorBoundary from "./app/components/ErrorBoundary"; 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/standardslist" element={<StandardsListPage />} />
             <Route path="/studentlist" element={<StudentList />} />
             <Route path="/class/:classId/mastery" element={<MasteryGrid />} />
+            <Route path="/class/:classId/standard/:standardId" element={<ScoringPage/>} />
           </Route>
         </Route>
       </Routes>
