@@ -1,3 +1,4 @@
+/*
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
@@ -10,9 +11,9 @@ export default function DashboardLayout() {
     </div>
   );
 }
+*/
 
 
-/*
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
@@ -27,4 +28,3 @@ export default function DashboardLayout() {
   );
 }
 
-*/
