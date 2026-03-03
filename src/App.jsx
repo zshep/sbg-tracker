@@ -5,7 +5,7 @@ import "./App.css";
 import Home from "./app/pages/Home";
 import Dashboard from "./app/pages/Dashboard";
 import ClassPage from "./app/pages/ClassPage";
-
+import StandardsListPage from "./app/pages/StandardsListPage";
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
 import ErrorBoundary from "./app/components/ErrorBoundary"; // <-- adjust path if different
 
@@ -25,6 +25,7 @@ function App() {
           >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/class/:classId" element={<ClassPage />} />
+            <Route path="/standardslist" element={<StandardsListPage />} />
           </Route>
         </Route>
       </Routes>
