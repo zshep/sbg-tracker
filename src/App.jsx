@@ -5,6 +5,7 @@ import "./App.css";
 import Home from "./app/pages/Home";
 import Dashboard from "./app/pages/Dashboard";
 import ClassPage from "./app/pages/ClassPage";
+import MasteryGrid from "./app/pages/MasteryGrid";
 import StandardsListPage from "./app/pages/StandardsListPage";
 import StudentList from "./app/pages/StudentList";
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/class/:classId" element={<ClassPage />} />
             <Route path="/standardslist" element={<StandardsListPage />} />
             <Route path="/studentlist" element={<StudentList />} />
+            <Route path="/class/:classId/mastery" element={<MasteryGrid />} />
           </Route>
         </Route>
       </Routes>
