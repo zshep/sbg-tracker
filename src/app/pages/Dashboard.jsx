@@ -9,7 +9,7 @@ export default function Dashboard() {
     <div className="page">
       <header className="page-header">
         <h2>Dashboard</h2>
-        <p className="muted">Hello, {user.uid}</p>
+        <p className="muted">Hello, Demo User</p>
       </header>
 
       <ClassSection />

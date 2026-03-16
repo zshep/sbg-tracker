@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./app/context/RequireAuth";
 import "./App.css";
@@ -14,28 +13,31 @@ import StudentList from "./app/pages/StudentList";
 import ScoringPage from "./app/pages/ScoringPage";
 
 import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
+import ErrorBoundary from "./app/components/ErrorBoundary";
 
 function App() {
   return (
     <BrowserRouter>
-    <div>
-        <p>Do YOU SEE ME George</p>
-      </div>
-        
       <Routes>
-        
         <Route path="/" element={<Home />} />
 
         <Route element={<RequireAuth />}>
-          <Route element={<DashboardLayout />}>
+          <Route
+            element={
+              <ErrorBoundary>
+                <DashboardLayout />
+              </ErrorBoundary>
+            }
+          >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/standardslist" element={<StandardsListPage />} />
             <Route path="/standard/:standardId" element={<StandardPage />} />
             <Route path="/studentlist" element={<StudentList />} />
-            
-
             <Route path="/class/:classId" element={<ClassPage />} />
-            <Route path="/class/:classId/standard/:standardId" element={<ScoringPage/>} />
+            <Route
+              path="/class/:classId/standard/:standardId"
+              element={<ScoringPage />}
+            />
             <Route path="/class/:classId/mastery" element={<MasteryGrid />} />
             <Route
               path="/classes/:classId/studentpage/:studentId"
@@ -49,7 +51,3 @@ function App() {
 }
 
 export default App;
-
-/*
-
-*/
