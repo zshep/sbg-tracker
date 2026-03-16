@@ -9,10 +9,7 @@ export default function Dashboard() {
   return (
     <div className="page">
       <header className="page-header">
-      <h1>DASHBOARD CANARY</h1>
-      <p>If you see this, routing + layout are fine.</p>
-        <h2>Dashboard</h2>
-
+     
         <p className="muted">Hello, Demo User</p>
 
       </header>
