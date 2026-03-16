@@ -18,7 +18,12 @@ import DashboardLayout from "./app/components/Dashboard/DashboardLayout";
 function App() {
   return (
     <BrowserRouter>
+    <div>
+        <p>Do YOU SEE ME George</p>
+      </div>
+        
       <Routes>
+        
         <Route path="/" element={<Home />} />
 
         <Route element={<RequireAuth />}>
@@ -44,3 +49,7 @@ function App() {
 }
 
 export default App;
+
+/*
+
+*/

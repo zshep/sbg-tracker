@@ -5,8 +5,12 @@ import "./index.css";
 import { AuthProvider } from "./app/context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  
   <React.StrictMode>
     <AuthProvider>
+      <div>
+        <p>do you see me Frank</p>
+      </div>
       <App />
     </AuthProvider>
   </React.StrictMode>
