@@ -149,55 +149,146 @@
 
 /* ---------------- Home styling ---------------- */
 .home {
-  padding-top: 64px;
-  text-align: center;
-  
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+  color: #14213d;
 }
 
-.home__header {
-  margin-bottom: 24px;
+.home__hero {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 3rem;
+  padding: 2.5rem 1.5rem;
+
+  background: #f8faf8; /* very light green tint */
+  border: 1px solid #e2e8e5;
+  border-radius: 16px;
+}
+
+.home__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2a6f97;
 }
 
 .home__title {
   margin: 0;
-  font-size: 42px;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
   line-height: 1.1;
-  letter-spacing: -0.02em;
 }
 
 .home__subtitle {
-  margin: 12px auto 0;
-  color: var(--muted);
-  max-width: 60ch;
+  margin: 1rem auto 0;
+  max-width: 720px;
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #334155;
 }
 
-.home__card {
-  
-  display: grid;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  text-align: left;
-  width: 100%;
-  max-width: 600px;
-  margin: 24px auto 0;
-}
-
-.home__cardTitle {
-  margin: 0 0 6px;
-  font-size: 16px;
-}
-
-.home__cardText {
-  margin: 0;
-  color: var(--muted);
+.home__intro {
+  margin: 1.25rem auto 0;
+  max-width: 720px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #475569;
 }
 
 .home__actions {
-  margin-top: 12px;
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.home__section {
+  margin-top: 3.5rem;
+}
+
+.home__sectionTitle {
+  text-align: center;
+  font-size: 1.7rem;
+  margin-bottom: 1.5rem;
+}
+
+.home__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.home__featureCard,
+.home__statusCard,
+.home__footerCta {
+  background: #ffffff;
+  border: 1px solid #dbe4ee;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.home__featureCard {
+  padding: 1.5rem;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.home__featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.home__featureTitle {
+  margin: 0 0 0.85rem;
+  font-size: 1.2rem;
+}
+
+.home__featureText {
+  margin: 0;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.home__statusCard,
+.home__footerCta {
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.home__statusText,
+.home__footerText {
+  margin: 0;
+  line-height: 1.8;
+  color: #475569;
+}
+
+@media (max-width: 900px) {
+  .home__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home {
+    padding: 2.25rem 1rem 3rem;
+  }
+
+  .home__title {
+    font-size: 2.4rem;
+  }
+
+  .home__subtitle {
+    font-size: 1.08rem;
+  }
 }
 
 /* ---------------- Nav bar Styling ---------------- */
@@ -472,9 +563,20 @@
 }
 
 .btn-primary {
-  border-color: #111;
-  background: #111;
-  color: white;
+  background: #2f5d50; /* chalkboard green */
+  color: #ffffff;
+  border: none;
+  padding: 0.7rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #264a40; /* darker chalk */
+  transform: translateY(-1px);
 }
 
 .btn-danger {
