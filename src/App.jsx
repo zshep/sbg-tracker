@@ -21,6 +21,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
 
+        
+
+        <Route path="*" element={<div>Route not found</div>} />
+
         <Route element={<RequireAuth />}>
           <Route
             element={

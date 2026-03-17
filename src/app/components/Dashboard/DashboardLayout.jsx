@@ -3,6 +3,8 @@ import NavBar from "./NavBar";
 
 export default function DashboardLayout() {
   return (
+
+    
     <div className="dashboard-layout">
       <NavBar />
       <main className="dashboard-main">
