@@ -121,8 +121,8 @@ export default function ClassSection() {
     return () => unsub();
   }, [user]);
 
-  if (loading) return null;
-  if (!user) return null;
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>Lodaing User</div>;
 
   const handleCreate = async ({ className, classPeriod }) => {
     const classesRef = collection(db, "teachers", user.uid, "classes");

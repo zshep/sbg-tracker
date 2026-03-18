@@ -23,7 +23,7 @@ function App() {
 
         
 
-        <Route path="*" element={<div>Route not found</div>} />
+        
 
         <Route element={<RequireAuth />}>
           <Route
@@ -49,6 +49,7 @@ function App() {
             />
           </Route>
         </Route>
+        <Route path="*" element={<div>Route not found</div>} />
       </Routes>
     </BrowserRouter>
   );

@@ -234,8 +234,8 @@ export default function ClassPage() {
     return () => unsub();
   }, [user, classId]);
 
-  if (loading) return null;
-  if (!user) return null;
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>Lodaing User</div>;
 
   if (klassLoading) return <p>Loading class…</p>;
   if (!klass) return <p>Class not found.</p>;

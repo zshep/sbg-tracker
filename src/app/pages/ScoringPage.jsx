@@ -237,8 +237,8 @@ export default function ScoringPage() {
     }
   };
 
-  if (loading) return null;
-  if (!user) return null;
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>Lodaing User</div>;
 
   return (
     <div className="page">

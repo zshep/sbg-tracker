@@ -134,8 +134,8 @@ export default function MasteryGrid() {
     return map;
   }, [scores]);
 
-  if (loading) return null;
-  if (!user) return null;
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>Lodaing User</div>;
 
   //csv file helpers
   function csvEscape(value) {

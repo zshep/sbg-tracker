@@ -4,7 +4,7 @@ import ClassSection from "../components/Dashboard/ClassSection";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  if (!user) return null;
+  if (!user) <div>Lodaing User</div>;
 
   return (
     <div className="page">
