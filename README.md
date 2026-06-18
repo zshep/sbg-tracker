@@ -193,6 +193,8 @@ This supports:
 
     - Scores
 
+- Nested sub-collection data modeling to take advantage of automatic cascading data scoping and clean, intuitive Firestore document paths
+
 ## Future Enhancements
 
 Planned improvements include:
@@ -215,7 +217,7 @@ Local Development
 
 Clone the repository:
 ```
-git clone https://github.com/your-username/sbg-tracker.git
+git clone https://github.com/zshep/sbg-tracker.git
 ```
 Install dependencies:
 ```
