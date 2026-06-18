@@ -26,6 +26,7 @@ import {
 function AddClassModal({ open, onClose, onCreate }) {
   const [className, setClassName] = useState("");
   const [classPeriod, setClassPeriod] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!open) {
@@ -36,16 +37,23 @@ function AddClassModal({ open, onClose, onCreate }) {
 
   if (!open) return null;
 
-  const canSubmit =
-    className.trim().length > 0 && classPeriod.trim().length > 0;
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    setError("");
+
+    const trimmedName = className.trim()
+    const trimmedPeriod = classPeriod.trim()
+
+    
+    if (!trimmedName || !trimmedPeriod) {
+      setError("Please enter both a class name and a class period.")
+      return;
+    }
 
     onCreate({
-      className: className.trim(),
-      classPeriod: classPeriod.trim(),
+      className: trimmedName,
+      classPeriod: trimmedPeriod,
     });
   };
 
@@ -78,6 +86,8 @@ function AddClassModal({ open, onClose, onCreate }) {
             />
           </div>
 
+          {error ? <div className="error">{error}</div> : null}
+
           <div className="modal__footer">
             <button className="btn" type="button" onClick={onClose}>
               Cancel
@@ -85,7 +95,6 @@ function AddClassModal({ open, onClose, onCreate }) {
             <button
               className="btn btn-primary"
               type="submit"
-              disabled={!canSubmit}
             >
               Create
             </button>
